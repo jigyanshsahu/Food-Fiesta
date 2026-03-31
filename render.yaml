@@ -4,7 +4,7 @@ services:
     name: food-fiesta-backend
     runtime: docker
     dockerContext: ./backend
-    dockerfilePath: Dockerfile
+    dockerfilePath: backend/Dockerfile
     envVars:
       - key: PORT
         value: 10000
@@ -28,7 +28,7 @@ services:
     name: food-fiesta-frontend
     runtime: docker
     dockerContext: ./frontend
-    dockerfilePath: Dockerfile
+    dockerfilePath: frontend/Dockerfile
     # Render needs to know the container is listening on port 80
     envVars:
       - key: PORT
@@ -42,7 +42,7 @@ services:
     name: food-fiesta-admin
     runtime: docker
     dockerContext: ./admin
-    dockerfilePath: Dockerfile
+    dockerfilePath: admin/Dockerfile
     envVars:
       - key: PORT
         value: 80
