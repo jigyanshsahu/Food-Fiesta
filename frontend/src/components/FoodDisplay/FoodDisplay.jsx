@@ -6,8 +6,8 @@ import FoodItem from '../FoodItem/FoodItem';
 const FoodDisplay = ({ category }) => {
   const { food_list, url } = useContext(StoreContext);
 
-  // Filter food list based on selected category
-  const filteredList = food_list.filter(item => 
+  // Filter food list based on selected category (with safety check)
+  const filteredList = (food_list || []).filter(item => 
     category === "all" || category === "ALL" || category === item.category
   );
 

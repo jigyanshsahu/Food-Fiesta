@@ -68,7 +68,7 @@ const addtocart = async (itemid) => {
     let totalamount = 0;
     for (const item in cartitem) {
       if (cartitem[item] > 0) {
-        const iteminfo = food_list.find(
+        const iteminfo = (food_list || []).find(
           (product) => product._id.toString() === item
         );
         if (iteminfo) totalamount += iteminfo.price * cartitem[item];
