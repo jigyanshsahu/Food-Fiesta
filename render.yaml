@@ -1,0 +1,52 @@
+services:
+  # 1. THE BACKEND (API)
+  - type: web
+    name: food-fiesta-backend
+    runtime: docker
+    dockerContext: ./backend
+    dockerfilePath: Dockerfile
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: MONGO_URI
+        sync: false # Set this in Render dashboard for security
+      - key: JWT_SECRET
+        sync: false
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: STRIPE_SECRET_KEY
+        sync: false
+    # Backend needs more memory if it handles images
+    plan: free
+
+  # 2. THE FRONTEND (USER APP)
+  - type: web
+    name: food-fiesta-frontend
+    runtime: docker
+    dockerContext: ./frontend
+    dockerfilePath: Dockerfile
+    envVars:
+      - key: VITE_BACKEND_URL
+        fromService:
+          name: food-fiesta-backend
+          type: web
+          property: host
+    plan: free
+
+  # 3. THE ADMIN PANEL
+  - type: web
+    name: food-fiesta-admin
+    runtime: docker
+    dockerContext: ./admin
+    dockerfilePath: Dockerfile
+    envVars:
+      - key: VITE_BACKEND_URL
+        fromService:
+          name: food-fiesta-backend
+          type: web
+          property: host
+    plan: free

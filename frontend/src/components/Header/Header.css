@@ -8,7 +8,7 @@
   height: 520px;
   border-radius: var(--radius-xl);
   overflow: hidden;
-  background: url('./shushi.jpg') no-repeat center center;
+  background: url('/shushi.jpg') no-repeat center center;
   background-size: cover;
   margin-top: 16px;
 }
