@@ -29,12 +29,12 @@ services:
     runtime: docker
     dockerContext: ./frontend
     dockerfilePath: Dockerfile
+    # Render needs to know the container is listening on port 80
     envVars:
+      - key: PORT
+        value: 80
       - key: VITE_BACKEND_URL
-        fromService:
-          name: food-fiesta-backend
-          type: web
-          property: host
+        sync: false # SET THIS TO YOUR PUBLIC BACKEND URL IN RENDER DASHBOARD
     plan: free
 
   # 3. THE ADMIN PANEL
@@ -44,9 +44,8 @@ services:
     dockerContext: ./admin
     dockerfilePath: Dockerfile
     envVars:
+      - key: PORT
+        value: 80
       - key: VITE_BACKEND_URL
-        fromService:
-          name: food-fiesta-backend
-          type: web
-          property: host
+        sync: false # SET THIS TO YOUR PUBLIC BACKEND URL IN RENDER DASHBOARD
     plan: free
