@@ -1,15 +1,15 @@
 import React from 'react'
-import Navbar from './components/sidebar/navabar/Navbar'
-import Sidebar from './components/sidebar/sidebar/Sidebar'
+import Navbar from './components/Sidebar/Navbar/Navbar'
+import Sidebar from './components/Sidebar/Sidebar/Sidebar'
 import { Route, Routes } from 'react-router-dom'
-import List from './pages/LIST/List'
-import Add from './pages/ADD/Add'
-import Order from "./pages/ORDER/Orders";
-import './app.css'
+import List from './pages/List/List'
+import Add from './pages/Add/Add'
+import Order from "./pages/Order/Orders";
+import './App.css'
 import { ToastContainer } from 'react-toastify';
 
 const App = () => {
-  const url = "https://newfoodbackend.onrender.com"
+  const url = import.meta.env.VITE_BACKEND_URL || "http://localhost:4000"
 
   return (
     <div className='h'>

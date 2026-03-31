@@ -1,20 +1,20 @@
-import React, { useState } from 'react'
-import "./Home.css";
+import React, { useState } from 'react';
+import Header from '../../components/Header/Header';
+import ExploreMenu from '../../components/ExploreMenu/ExploreMenu';
+import FoodDisplay from '../../components/FoodDisplay/FoodDisplay';
+import AppDownload from '../../components/AppDownload/AppDownload';
 
-import Header from '../../components/header/Header'
-import Exploremenu from '../../components/ExploreMenu/Exploremenu'
-import foodDisplay from '../../components/food-display/foodDisplay'
-import Appdownload from '../../components/appdownload/Appdownload'
 const Home = () => {
-  const [category, setCategory] = useState("ALL")
-  return (
-    <div>
-      <Header/> 
-      <Exploremenu category={category} setCategory={setCategory}/>
-      <foodDisplay category={category}/>
-      <Appdownload/>
-    </div>
-  )
-}
+    const [category, setCategory] = useState("all");
 
-export default Home
+    return (
+        <main className="home-page animate-fade-in">
+            <Header />
+            <ExploreMenu category={category} setCategory={setCategory} />
+            <FoodDisplay category={category} />
+            <AppDownload />
+        </main>
+    );
+};
+
+export default Home;

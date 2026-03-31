@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 import { StoreContext } from '../../context/StoreContext'
-import './verify.css'
+import './Verify.css'
 import axios from 'axios'
 
 const Verify = () => {
@@ -21,7 +21,7 @@ const Verify = () => {
       });
 
       if (response.data.success) {
-        navigate("/myorders");
+        navigate("/Myorder");
       } else {
         navigate("/");
       }

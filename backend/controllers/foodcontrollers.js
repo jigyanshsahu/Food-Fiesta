@@ -1,8 +1,8 @@
 import { log } from "console";
 import foodModel from "../models/foodModel.js";
+import fs from 'fs'
+import { cloudinary } from "../config/cloudinary.js";
 
-
-    import fs from 'fs'
 
     //add food item 
  const addfood = async (req, res) => {
@@ -11,13 +11,15 @@ import foodModel from "../models/foodModel.js";
       return res.json({ success: false, message: "Image is required" });
     }
 
-    const Image_filename = req.file.filename;
+    // When using Cloudinary, req.file.path contains the secure URL
+    const Image_url = req.file.path;
 
     const food = new foodModel({
       name: req.body.name,
       description: req.body.description,
       price: req.body.price,
-      Image: Image_filename,
+      Image: Image_url,
+      category: req.body.category,
     });
 
     await food.save();
@@ -48,10 +50,22 @@ try {
 
 try {
       const food = await foodModel.findById(req.body.id);
-      fs.unlink(`uploads/${food.Image}`,()=>{});
+      
+      // Check if it's a Cloudinary image or local image
+      if (food.Image && food.Image.includes("cloudinary.com")) {
+        // Extract public ID from URL to delete from Cloudinary
+        // Logic: everything between last '/' and following '.' unless you use a more robust way
+        const publicId = food.Image.split('/').pop().split('.')[0];
+        const folderName = food.Image.split('/').slice(-2)[0]; // e.g. food_fiesta
+        await cloudinary.uploader.destroy(`${folderName}/${publicId}`);
+      } else {
+        fs.unlink(`uploads/${food.Image}`,()=>{});
+      }
+
       await foodModel.findByIdAndDelete(req.body.id);
       res.json({success:true, message:"food removed"})
 } catch (error) {
+    console.log(error);
     res.json({success:false,message:"error"})
 }
 

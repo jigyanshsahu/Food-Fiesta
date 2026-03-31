@@ -1,91 +1,156 @@
+/* =============================================
+   HEADER / HERO — Gradient Overlay
+   ============================================= */
+
 .header {
-    margin: 30px auto;
-    background: url('shushi.jpg')  no-repeat;
-    background-size: 80vw 80vh; 
-    position: relative;
-    background-position: center;
-    border-radius: 20px;
-     height: 65vh;
-
-     
-}
-.qwerty{
-  text-wrap: nowrap;
-}
-.header button:hover {
-  background-color:#ef4444;
-  color:  white;
-  transition: 0.5s;
-
-}
-.header button{
-      position: relative;
-  right : 200px;
-  margin: auto;
-  bottom:  200px;   
-  font-size: larger ;
-
-}
-@keyframes fadeIn {
-  0% { opacity: 0; transform: translateY(20px); }
-  100% { opacity: 1; transform: translateY(0); }
+  position: relative;
+  width: 100%;
+  height: 520px;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  background: url('./shushi.jpg') no-repeat center center;
+  background-size: cover;
+  margin-top: 16px;
 }
 
-.fade-in {
-  animation: fadeIn 1.5s ease-in-out forwards;
+.header__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(26, 26, 46, 0.85) 0%,
+    rgba(26, 26, 46, 0.55) 50%,
+    rgba(26, 26, 46, 0.3) 100%
+  );
+  z-index: 1;
 }
-@media (max-width: 1050px) {
+
+.header__content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  height: 100%;
+  padding: 0 8%;
+  max-width: 650px;
+}
+
+.header__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  background: rgba(255, 107, 53, 0.2);
+  border: 1px solid rgba(255, 107, 53, 0.3);
+  color: #FFB08A;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: var(--radius-full);
+  backdrop-filter: blur(10px);
+  margin-bottom: 20px;
+  animation: fadeInUp 0.6s var(--ease) forwards;
+}
+
+.header__title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  line-height: 1.1;
+  margin-bottom: 20px;
+  animation: fadeInUp 0.6s var(--ease) 0.1s forwards;
+  opacity: 0;
+}
+
+.header__title-highlight {
+  background: linear-gradient(135deg, var(--primary), #FFB347);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.header__subtitle {
+  font-size: 1.05rem;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.7;
+  margin-bottom: 32px;
+  max-width: 480px;
+  animation: fadeInUp 0.6s var(--ease) 0.2s forwards;
+  opacity: 0;
+}
+
+.header__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 32px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-inverse);
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-glow);
+  transition: all var(--duration) var(--ease);
+  animation: fadeInUp 0.6s var(--ease) 0.3s forwards;
+  opacity: 0;
+}
+
+.header__cta:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(255, 107, 53, 0.4);
+}
+
+.header__cta svg {
+  transition: transform var(--duration) var(--ease);
+}
+
+.header__cta:hover svg {
+  transform: translateX(4px);
+}
+
+/* =============================================
+   RESPONSIVE
+   ============================================= */
+
+@media (max-width: 768px) {
   .header {
-    height: 55vh;
-    background-size: contain !important;   /* FIXED */
-    background-repeat: no-repeat;
-    background-position: center;
-    margin-top: 0;
-    position: relative;
-    bottom: 100px ;
-    margin-bottom: 0;
-    padding-bottom: 0;
-
-  }
-  .qwerty{
-    position: fixed;
-    padding-bottom: 30px;
-
-    
+    height: 420px;
+    border-radius: var(--radius-lg);
+    margin-top: 8px;
   }
 
-  .header-content {
-    max-width: 80% !important;
-    bottom: 5% !important;
-    left: 4vw !important;
+  .header__content {
+    padding: 0 6%;
   }
 
-  .header h1 {
-    font-size: 2.1rem !important;
-    bottom: 100px !important;
-    padding-left: 10px !important;
-    position: relative;
-   top: -46px;
+  .header__title {
+    font-size: 2.2rem;
   }
 
-  .header p {
-    font-size: 1.2rem !important;
-    width: 90% !important;
-    bottom: 40px !important;
-    left: 25px !important;
-    padding: 6px 10px !important;
-        position: relative;
-    top: -8px;
+  .header__subtitle {
+    font-size: 0.92rem;
+    margin-bottom: 24px;
   }
 
-  .header button {
-           right: 0 !important;
-        bottom: 20px !important;
-        width: 150px !important;
-        height: 45px !important;
-        font-size: 1rem !important;
-        position: relative;
-        top: 12px;
-        left: 5px;
+  .header__cta {
+    padding: 12px 26px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    height: 380px;
+  }
+
+  .header__title {
+    font-size: 1.8rem;
+  }
+
+  .header__badge {
+    font-size: 0.75rem;
+    padding: 6px 14px;
   }
 }

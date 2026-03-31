@@ -1,51 +1,54 @@
-      import React, { useContext, } from 'react'
-      import { assets } from '../../assets/assets'
-      import './fooditem.css'
-  import { StoreContext } from '../../context/Storecontext'
-      const fooditem = ({id,name,price,description,Image}) => {
-      
-        const{ cartitem,addtocart,removefromcart } = useContext(StoreContext);
-        return (
-          <div className='fooditem'>
-            <div className="fooditemImagecontainer relative">
-              <img  className='fooditemImage ' src={Image} alt="" />
-          {
-    !cartitem[id] ? (
-      <img
-        className="add absolute w-9 cursor-pointer rounded-full bottom-4 right-4"
-        onClick={() => addtocart(id)}
-        src={assets.add}
-        alt=""
-      />
-    ) : (
-      <div className="fooditemcounter absolute bottom-4 right-4 flex items-center gap-3 px-4 py-2 rounded-full bg-white shadow">
-        <img
-          onClick={() => removefromcart(id)}
-          className="w-5 cursor-pointer"
-          src={assets.minusred}
-          alt=""
-        />
-        <p className="text-lg">{cartitem[id]}</p>
-        <img
-          onClick={() => addtocart(id)}
-          className="w-5 cursor-pointer"
-          src={assets.plusgreen}
-          alt=""
-        />
-      </div>
-    )
-  }
+import React, { useContext } from 'react'
+import { assets } from '../../assets/assets'
+import './FoodItem.css'
+import { StoreContext } from '../../context/StoreContext'
 
-            </div>
-            <div className='food-item-info p-5 '>
-            
-              <p className='text-2xl'>{name}</p>
-              <p className='fooditemdesc text-[#676767]'>{description}</p>
-              <p className='food-itemprice text-2xl text-red-500'>₹{price}</p>   
-            </div>
+const FoodItem = ({ id, name, price, description, Image }) => {
+  const { cartitem, addtocart, removefromcart } = useContext(StoreContext);
+
+  return (
+    <div className='food-item animate-scale-in'>
+      <div className="food-item__img-container">
+        <img className='food-item__img' src={Image} alt={name} />
+        
+        {!cartitem[id] ? (
+          <button 
+            className="food-item__add-btn" 
+            onClick={() => addtocart(id)}
+            aria-label="Add to cart"
+          >
+            <img src={assets.add} alt="" />
+          </button>
+        ) : (
+          <div className="food-item__counter">
+            <button onClick={() => removefromcart(id)} className="food-item__counter-btn">
+              <img src={assets.minusred} alt="Decrease" />
+            </button>
+            <span className="food-item__count">{cartitem[id]}</span>
+            <button onClick={() => addtocart(id)} className="food-item__counter-btn">
+              <img src={assets.plusgreen} alt="Increase" />
+            </button>
           </div>
-        )
-      }
-      
-      export default fooditem
-      
+        )}
+      </div>
+
+      <div className='food-item__info'>
+        <div className="food-item__header">
+          <h3 className='food-item__name'>{name}</h3>
+          <div className="food-item__rating">
+            {/* Hardcoded stars for visual polish */}
+            <span className="star">★</span>
+            <span className="star">★</span>
+            <span className="star">★</span>
+            <span className="star">★</span>
+            <span className="star--dim">★</span>
+          </div>
+        </div>
+        <p className='food-item__desc'>{description}</p>
+        <p className='food-item__price'>₹{price}</p>
+      </div>
+    </div>
+  )
+}
+
+export default FoodItem

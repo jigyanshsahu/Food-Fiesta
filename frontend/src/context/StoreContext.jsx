@@ -7,7 +7,7 @@ const StoreContextProvider = (props) => {
   const [cartitem, setcartitem] = useState({});
   const [token, settoken] = useState("");
   const [food_list, setfood_list] = useState([]);
-  const url = "https://newfoodbackend.onrender.com";
+  const url = import.meta.env.VITE_BACKEND_URL || "http://localhost:4000";
 
   // Load token from localStorage on refresh
   useEffect(() => {

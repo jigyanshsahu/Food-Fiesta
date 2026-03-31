@@ -1,7 +1,69 @@
-.food-display-list{
-    display: grid;
-    grid-template-columns: repeat(auto-fill,minmax(240px,1fr));
-    margin-top: 30px;
+/* =============================================
+   FOOD DISPLAY — Grid Layout
+   ============================================= */
+
+.food-display {
+  padding: 40px 0 60px;
+}
+
+.food-display__header {
+  margin-bottom: 40px;
+}
+
+.food-display__title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.food-display__subtitle {
+  font-size: 1rem;
+  color: var(--text-secondary);
+}
+
+.food-display__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 30px;
+  animation: fadeIn 0.8s var(--ease);
+}
+
+.food-display__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  border: 1px dashed var(--border);
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.food-display__empty-icon {
+  font-size: 3rem;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+/* =============================================
+   RESPONSIVE
+   ============================================= */
+
+@media (max-width: 768px) {
+  .food-display {
+    padding: 30px 0 40px;
+  }
+
+  .food-display__title {
+    font-size: 1.5rem;
+  }
+
+  .food-display__list {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     gap: 20px;
-   background-color: white;
+  }
 }

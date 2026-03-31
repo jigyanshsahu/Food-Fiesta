@@ -1,15 +1,12 @@
 import React, { useContext, useState } from "react";
 import { assets } from "../../assets/assets";
-import "./loginpopup.css";
-import { StoreContext } from "../../context/Storecontext";   // IMPORTANT FIX
+import "./LoginPopup.css";
+import { StoreContext } from "../../context/StoreContext";
 import axios from "axios";
 
-const Loginpopup = ({ setShowlogin }) => {
-
+const LoginPopup = ({ setShowlogin }) => {
   const { url, settoken } = useContext(StoreContext);
-
   const [currentstate, setcurrentstate] = useState("Login");
-
   const [data, setdata] = useState({
     name: "",
     email: "",
@@ -23,10 +20,8 @@ const Loginpopup = ({ setShowlogin }) => {
 
   const onlogin = async (event) => {
     event.preventDefault();
-
     let newUrl = url;
 
-    // Correct login/register selection
     if (currentstate === "Login") {
       newUrl += "/api/user/login";
     } else {
@@ -34,14 +29,13 @@ const Loginpopup = ({ setShowlogin }) => {
     }
 
     try {
-      const Response = await axios.post(newUrl, data);
-
-      if (Response.data.success) {
-        settoken(Response.data.token);
-        localStorage.setItem("token", Response.data.token);
+      const response = await axios.post(newUrl, data);
+      if (response.data.success) {
+        settoken(response.data.token);
+        localStorage.setItem("token", response.data.token);
         setShowlogin(false);
       } else {
-        alert(Response.data.message);
+        alert(response.data.message);
       }
     } catch (error) {
       console.error(error);
@@ -50,93 +44,96 @@ const Loginpopup = ({ setShowlogin }) => {
   };
 
   return (
-    <div className="Login-popup cursor-pointer gap-2 absolute z-10 w-full h-full grid">
-      <form onSubmit={onlogin} className="loginpopupcontainer">
-        
-        <div className="loginpopuptitle">
-          <h2 className="text-2xl text-black">
-            {currentstate === "Sign-Up" ? "Sign-Up" : "Login"}
+    <div className="login-popup">
+      <div className="login-popup__overlay" onClick={() => setShowlogin(false)} />
+      
+      <form onSubmit={onlogin} className="login-popup__container animate-scale-in">
+        <div className="login-popup__header">
+          <h2 className="login-popup__title">
+            {currentstate === "Sign-Up" ? "Create Account" : "Login"}
           </h2>
-
-          <img
-            className="relative left-24 bottom-8 cursor-pointer"
+          <button 
+            type="button"
+            className="login-popup__close-btn" 
             onClick={() => setShowlogin(false)}
-            src={assets.cancel}
-            alt="close"
-          />
+            aria-label="Close"
+          >
+            ✕
+          </button>
         </div>
 
-        <div className="loginpopupinput flex flex-col gap-3 p-4 rounded transition-all duration-300">
-
+        <div className="login-popup__inputs">
           {currentstate === "Sign-Up" && (
-            <input
-              name="name"
-              type="text"
-              onChange={oncChangeHandler}
-              value={data.name}
-              placeholder="Your Name"
-              required
-              className="border p-2 rounded"
-            />
+            <div className="login-popup__input-group">
+              <label htmlFor="name">Full Name</label>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                onChange={oncChangeHandler}
+                value={data.name}
+                placeholder="Enter your name"
+                required
+              />
+            </div>
           )}
 
-          <input
-            type="email"
-            name="email"
-            onChange={oncChangeHandler}
-            value={data.email}
-            placeholder="Your Email"
-            required
-            className="border p-2 rounded"
-          />
+          <div className="login-popup__input-group">
+            <label htmlFor="email">Email Address</label>
+            <input
+              id="email"
+              type="email"
+              name="email"
+              onChange={oncChangeHandler}
+              value={data.email}
+              placeholder="Enter your email"
+              required
+            />
+          </div>
 
-          <input
-            type="password"
-            name="password"
-            onChange={oncChangeHandler}
-            value={data.password}
-            placeholder="Password"
-            required
-            className="border p-2 rounded"
-          />
+          <div className="login-popup__input-group">
+            <label htmlFor="password">Password</label>
+            <input
+              id="password"
+              type="password"
+              name="password"
+              onChange={oncChangeHandler}
+              value={data.password}
+              placeholder="••••••••"
+              required
+            />
+          </div>
         </div>
 
-        <button
-          type="submit"
-          className="bg-red-400 w-full py-3 text-2xl font-bold text-black rounded-2xl"
-        >
-          {currentstate === "Sign-Up" ? "Create Account" : "Login"}
+        <button type="submit" className="login-popup__submit-btn">
+          {currentstate === "Sign-Up" ? "Sign Up" : "Sign In"}
         </button>
 
-        <div className="loginpopupcondition flex gap-2 mt-2">
-          <input type="checkbox" required />
-          <p className="text-black">By continuing, I agree to the terms and privacy policy.</p>
+        <div className="login-popup__condition">
+          <input type="checkbox" id="terms" required />
+          <label htmlFor="terms">I agree to the <span>Terms & Privacy Policy</span></label>
         </div>
 
-        {currentstate === "Login" ? (
-          <p className="mt-2">
-            Create a new account?{" "}
-            <span
-              className="hover:underline cursor-pointer"
-              onClick={() => setcurrentstate("Sign-Up")}
-            >
-              Click here
-            </span>
-          </p>
-        ) : (
-          <p className="mt-2">
-            Already have an account?{" "}
-            <span
-              className="hover:underline cursor-pointer"
-              onClick={() => setcurrentstate("Login")}
-            >
-              Login here
-            </span>
-          </p>
-        )}
+        <div className="login-popup__footer">
+          {currentstate === "Login" ? (
+            <p>
+              New here?{" "}
+              <span className="login-popup__toggle" onClick={() => setcurrentstate("Sign-Up")}>
+                Create an account
+              </span>
+            </p>
+          ) : (
+            <p>
+              Already have an account?{" "}
+              <span className="login-popup__toggle" onClick={() => setcurrentstate("Login")}>
+                Login here
+              </span>
+            </p>
+          )}
+        </div>
       </form>
     </div>
   );
 };
 
-export default Loginpopup;
+export default LoginPopup;

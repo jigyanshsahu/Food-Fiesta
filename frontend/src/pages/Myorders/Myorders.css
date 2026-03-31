@@ -1,0 +1,235 @@
+/* =============================================
+   MY ORDERS PAGE — Tracking View
+   ============================================= */
+
+.my-orders-page {
+  padding: 40px 0 80px;
+}
+
+.orders-container {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.orders-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.page-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.refresh-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  color: var(--text-secondary);
+  transition: all 0.2s;
+}
+
+.refresh-btn:hover {
+  background: var(--surface-hover);
+  color: var(--primary);
+}
+
+/* Loading & Empty States */
+.orders-loading {
+  text-align: center;
+  padding: 100px 0;
+  color: var(--text-secondary);
+}
+
+.spinner {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--border-light);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: rotate 1s linear infinite;
+  margin-bottom: 16px;
+}
+
+.orders-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 60px;
+}
+
+.empty-icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+  opacity: 0.5;
+}
+
+.orders-empty h3 {
+  font-size: 1.5rem;
+  margin-bottom: 12px;
+}
+
+.orders-empty button {
+  margin-top: 24px;
+  padding: 12px 32px;
+  background: var(--primary);
+  color: white;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+}
+
+/* Order Card */
+.order-card {
+  padding: 24px;
+  margin-bottom: 20px;
+  border: 1px solid var(--border-light);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.order-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--border);
+}
+
+.order-main {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.order-icon-box {
+  width: 60px;
+  height: 60px;
+  background: var(--surface-hover);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.order-icon-box img {
+  width: 32px;
+  height: 32px;
+}
+
+.order-details {
+  flex: 2;
+}
+
+.order-items-list {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.order-items-list small {
+  color: var(--primary);
+  margin-left: 4px;
+}
+
+.order-date {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.order-stats {
+  flex: 1;
+  text-align: center;
+}
+
+.order-amount {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.order-count {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+/* Status Badge */
+.order-status-box {
+  flex: 1;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  font-weight: 700;
+  background: #F3F4F6;
+  color: #4B5563;
+}
+
+.status-badge .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* Status colors */
+.status-badge.food-processing { background: #FEF3C7; color: #D97706; }
+.status-badge.out-for-delivery { background: #DBEAFE; color: #2563EB; }
+.status-badge.delivered { background: #D1FAE5; color: #059669; }
+
+.track-btn {
+  padding: 10px 24px;
+  background: var(--primary-glow);
+  color: var(--primary);
+  font-weight: 700;
+  border-radius: var(--radius-md);
+  transition: all 0.2s;
+}
+
+.track-btn:hover {
+  background: var(--primary);
+  color: white;
+}
+
+/* =============================================
+   RESPONSIVE
+   ============================================= */
+
+@media (max-width: 1024px) {
+  .order-main {
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .order-icon-box {
+    display: none;
+  }
+
+  .order-details {
+    flex: 1 1 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .order-main {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .status-badge {
+    justify-content: center;
+  }
+}

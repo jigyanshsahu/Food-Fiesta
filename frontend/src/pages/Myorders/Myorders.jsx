@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
-import { StoreContext } from "../../context/Storecontext";
+import { StoreContext } from "../../context/StoreContext";
 import axios from "axios";
+import "./Myorders.css";
 
 const Myorders = () => {
   const { url, token } = useContext(StoreContext);
@@ -12,20 +13,18 @@ const Myorders = () => {
     try {
       setLoading(true);
       setError("");
-    const response = await axios.post(
-  url + "/api/order/userorders",
-  {},
-  {
-    headers: {
-      "Authorization": `Bearer ${token}`
-    }
-  }
-);
-
-
+      const response = await axios.post(
+        url + "/api/order/userorders",
+        {},
+        {
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
+        }
+      );
       setOrders(response.data.data || []);
     } catch (err) {
-      setError("Failed to load orders.");
+      setError("Failed to load your orders. Please check your connection.");
       console.error(err);
     } finally {
       setLoading(false);
@@ -36,69 +35,79 @@ const Myorders = () => {
     if (token) fetchOrders();
   }, [token]);
 
-  
+  return (
+    <div className="my-orders-page animate-fade-in">
+      <div className="orders-container">
+        <header className="orders-header">
+          <h1 className="page-title">My Orders</h1>
+          <button onClick={fetchOrders} className="refresh-btn">
+            <span>🔄</span> Refresh
+          </button>
+        </header>
 
- return (
-  <div className="mt-24 h-[100vh] p-6">
-    <h1 className="text-3xl font-semibold mb-6">My Orders</h1>
-
-    {loading && <p className="text-gray-600">Loading your orders...</p>}
-    {error && <p className="text-red-500">{error}</p>}
-
-    {!loading && !error && orders.length === 0 && (
-      <p className="text-gray-500">You have not placed any orders yet.</p>
-    )}
-
-    <div className="space-y-6">
-      {orders.map((order) => (
-        <div
-          key={order._id}
-          className="border border-[#d5c4b2] rounded-xl p-6 flex items-center justify-between shadow-sm"
-        >
-          {/* LEFT ICON */}
-          <div className="flex items-start gap-4 w-1/3">
-            <img
-              src="https://cdn-icons-png.flaticon.com/512/679/679922.png"
-              alt="Package"
-              className="w-14 h-14"
-            />
-            <p className="text-gray-700 leading-relaxed">
-              {order.items
-                ?.map((item) => `${item.name} x ${item.quantity}`)
-                .join(", ")}
-            </p>
+        {loading && (
+          <div className="orders-loading">
+            <span className="spinner"></span>
+            <p>Fetching your delicioso meals...</p>
           </div>
+        )}
+        
+        {error && <div className="orders-error">{error}</div>}
 
-          {/* MIDDLE */}
-          <div className="flex flex-col items-center w-1/5">
-            <p className="font-medium text-gray-800">
-              ₹{order.amount}.00
-            </p>
-            <p className="text-gray-600 text-sm">
-              Items: {order.items?.length || 0}
-            </p>
+        {!loading && !error && orders.length === 0 && (
+          <div className="orders-empty card">
+            <div className="empty-icon">📦</div>
+            <h3>No orders yet</h3>
+            <p>Hungry? Explore our menu and place your first order!</p>
+            <button onClick={() => window.location.href = '/'}>Go To Menu</button>
           </div>
+        )}
 
-          {/* STATUS */}
-          <div className="flex items-center gap-2 w-1/5">
-            <span className="w-3 h-3 bg-red-500 rounded-full"></span>
-            <p className="text-gray-700 font-medium">
-              {order.status || "food Processing"}
-            </p>
-          </div>
+        <div className="orders-list">
+          {orders.map((order) => (
+            <div key={order._id} className="order-card card shadow-sm">
+              <div className="order-main">
+                <div className="order-icon-box">
+                  <img
+                    src="https://cdn-icons-png.flaticon.com/512/679/679922.png"
+                    alt="Package"
+                  />
+                </div>
+                
+                <div className="order-details">
+                  <p className="order-items-list">
+                    {order.items?.map((item, idx) => (
+                      <span key={idx}>
+                        {item.name} <small>x{item.quantity}</small>
+                        {idx < order.items.length - 1 ? ", " : ""}
+                      </span>
+                    ))}
+                  </p>
+                  <p className="order-date">Order ID: #{order._id.slice(-8).toUpperCase()}</p>
+                </div>
 
-          {/* BUTTON */}
-          <div className="w-1/6 flex justify-end">
-            <button onClick={fetchOrders} className="bg-[#f7d5d5] text-gray-800 px-6 py-2 rounded-lg font-medium hover:bg-[#f2c7c7] transition">
-              Track Order
-            </button>
-          </div>
+                <div className="order-stats">
+                  <p className="order-amount">₹{order.amount}.00</p>
+                  <p className="order-count">{order.items?.length || 0} Items</p>
+                </div>
+
+                <div className="order-status-box">
+                  <div className={`status-badge ${order.status?.toLowerCase().replace(/\s+/g, '-')}`}>
+                    <span className="dot"></span>
+                    <p>{order.status || "Processing"}</p>
+                  </div>
+                </div>
+
+                <div className="order-actions">
+                  <button onClick={fetchOrders} className="track-btn">Track Order</button>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
-      ))}
+      </div>
     </div>
-  </div>
-);
-
+  );
 };
 
 export default Myorders;

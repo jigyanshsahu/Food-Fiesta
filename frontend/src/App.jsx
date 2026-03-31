@@ -3,21 +3,21 @@ import Navbar from './components/Navbar/Navbar';
 import { Route, Routes } from 'react-router-dom';
 import Home from "./pages/Home/Home.jsx";
 
-import Cart from './pages/cart/Cart';
+import Cart from './pages/Cart/Cart';
 import Placeorder from './pages/Placeorder/Placeorder.jsx';
 import Footer from "./components/Footer/Footer";
 
-import Loginpopup from './components/Loginpopup/Loginpopup';
-import Verify from "./pages/verify/Verify.jsx";
+import LoginPopup from './components/LoginPopup/LoginPopup';
+import Verify from "./pages/Verify/Verify.jsx";
 
-import Myorders from './pages/myorder/Myorders';
+import Myorders from './pages/Myorders/Myorders';
 
 const App = () => {
   const [showlogin, setShowlogin] = useState(false);
 
   return (
     <>
-      {showlogin && <Loginpopup setShowlogin={setShowlogin} />}
+      {showlogin && <LoginPopup setShowlogin={setShowlogin} />}
       
       <div className='app'>
         <Navbar setShowlogin={setShowlogin} />

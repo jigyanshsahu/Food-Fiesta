@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { StoreContext } from "../../context/StoreContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import "./Placeorder.css";
 
 const Placeorder = () => {
   const navigate = useNavigate();
@@ -21,8 +22,7 @@ const Placeorder = () => {
   });
 
   const OnChangehandler = (event) => {
-    const name = event.target.name;
-    const value = event.target.value;
+    const { name, value } = event.target;
     setdata((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -30,7 +30,6 @@ const Placeorder = () => {
     event.preventDefault();
 
     let Orderitem = [];
-
     food_list.forEach((item) => {
       if (cartitem[item._id] > 0) {
         Orderitem.push({ ...item, quantity: cartitem[item._id] });
@@ -40,182 +39,200 @@ const Placeorder = () => {
     let orderData = {
       address: data,
       items: Orderitem,
-      amount: getcarttotalamount() + 2,
+      amount: getcarttotalamount() + 40, // Match delivery fee in Cart.jsx
     };
 
-  let response = await axios.post(
-  url + "/api/order/place",
-  orderData,
-  {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  }
-);
+    try {
+      let response = await axios.post(
+        url + "/api/order/place",
+        orderData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
 
-
-    if (response.data.success) {
-      const { session_url } = response.data;
-      window.location.replace(session_url);
-    } else {
-      alert("error");
+      if (response.data.success) {
+        const { session_url } = response.data;
+        window.location.replace(session_url);
+      } else {
+        alert("Payment gateway error. Please try again.");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Order placement failed.");
     }
   };
 
   useEffect(() => {
     if (!token) {
-      navigate("/cart");
+      navigate("/Cart");
     } else if (getcarttotalamount() === 0) {
-      navigate("/cart");
+      navigate("/Cart");
     }
   }, [token]);
 
+  const subtotal = getcarttotalamount();
+  const deliveryFee = subtotal > 0 ? 40 : 0;
+  const total = subtotal + deliveryFee;
 
   return (
-    <form onSubmit={placeOrder} className="placeorder h-[90vh]">
-      <div className="placeorder relative top-30 flex flex-col md:flex-row items-start justify-between gap-12 mt-24 px-4">
-        {/* LEFT SIDE – FORM */}
-        <div className="placeorderleft w-full md:w-[60%]">
-          <p className="tittle text-2xl font-medium mb-3">
-            Delivery Information
-          </p>
+    <div className="place-order-page animate-fade-in">
+      <form onSubmit={placeOrder} className="order-container">
+        <div className="order-grid">
+          {/* LEFT SIDE — DELIVERY FORM */}
+          <div className="delivery-form card shadow-md">
+            <h2 className="section-title">Delivery Information</h2>
+            
+            <div className="input-group-row">
+              <div className="input-field">
+                <label>First Name</label>
+                <input
+                  required
+                  name="firstName"
+                  value={data.firstName}
+                  onChange={OnChangehandler}
+                  type="text"
+                  placeholder="John"
+                />
+              </div>
+              <div className="input-field">
+                <label>Last Name</label>
+                <input
+                  required
+                  name="lastname"
+                  value={data.lastname}
+                  onChange={OnChangehandler}
+                  type="text"
+                  placeholder="Doe"
+                />
+              </div>
+            </div>
 
-          <div className="multifield flex gap-2">
-            <input
-              required
-              name="firstName"
-              value={data.firstName}
-              onChange={OnChangehandler}
-              className="m-2 w-full p-3 border"
-              type="text"
-              placeholder="First name"
-            />
+            <div className="input-field">
+              <label>Email Address</label>
+              <input
+                required
+                name="email"
+                value={data.email}
+                onChange={OnChangehandler}
+                type="email"
+                placeholder="john.doe@example.com"
+              />
+            </div>
 
-            <input
-              required
-              name="lastname"
-              value={data.lastname}
-              onChange={OnChangehandler}
-              className="m-2 w-full p-3 border"
-              type="text"
-              placeholder="Last name"
-            />
+            <div className="input-field">
+              <label>Street Address</label>
+              <input
+                required
+                name="street"
+                value={data.street}
+                onChange={OnChangehandler}
+                type="text"
+                placeholder="123 Foodie Lane"
+              />
+            </div>
+
+            <div className="input-group-row">
+              <div className="input-field">
+                <label>City</label>
+                <input
+                  required
+                  name="city"
+                  value={data.city}
+                  onChange={OnChangehandler}
+                  type="text"
+                  placeholder="San Francisco"
+                />
+              </div>
+              <div className="input-field">
+                <label>State</label>
+                <input
+                  required
+                  name="state"
+                  value={data.state}
+                  onChange={OnChangehandler}
+                  type="text"
+                  placeholder="CA"
+                />
+              </div>
+            </div>
+
+            <div className="input-group-row">
+              <div className="input-field">
+                <label>Zip Code</label>
+                <input
+                  required
+                  name="zipcode"
+                  value={data.zipcode}
+                  onChange={OnChangehandler}
+                  type="text"
+                  placeholder="94103"
+                />
+              </div>
+              <div className="input-field">
+                <label>Country</label>
+                <input
+                  required
+                  name="country"
+                  value={data.country}
+                  onChange={OnChangehandler}
+                  type="text"
+                  placeholder="USA"
+                />
+              </div>
+            </div>
+
+            <div className="input-field">
+              <label>Phone Number</label>
+              <input
+                required
+                name="phone"
+                value={data.phone}
+                onChange={OnChangehandler}
+                type="tel"
+                placeholder="+1 (555) 000-0000"
+              />
+            </div>
           </div>
 
-          <input
-            required
-            name="email"
-            value={data.email}
-            onChange={OnChangehandler}
-            className="m-2 w-full p-3 border"
-            type="email"
-            placeholder="Email address"
-          />
+          {/* RIGHT SIDE — ORDER SUMMARY */}
+          <div className="order-summary-sidebar">
+            <div className="order-summary card shadow-lg">
+              <h2 className="section-title">Order Summary</h2>
 
-          <input
-            required
-            name="street"
-            value={data.street}
-            onChange={OnChangehandler}
-            className="m-2 w-full p-3 border"
-            type="text"
-            placeholder="Street"
-          />
+              <div className="summary-details">
+                <div className="summary-item">
+                  <span>Subtotal</span>
+                  <span>₹{subtotal.toFixed(2)}</span>
+                </div>
+                <div className="summary-item">
+                  <span>Delivery Fee</span>
+                  <span>₹{deliveryFee.toFixed(2)}</span>
+                </div>
+                <div className="summary-divider"></div>
+                <div className="summary-item total">
+                  <span>Total</span>
+                  <span>₹{total.toFixed(2)}</span>
+                </div>
+              </div>
 
-          <div className="multifield flex gap-2">
-            <input
-              required
-              name="city"
-              value={data.city}
-              onChange={OnChangehandler}
-              className="m-2 w-full p-3 border"
-              type="text"
-              placeholder="City"
-            />
-
-            <input
-              required
-              name="state"
-              value={data.state}
-              onChange={OnChangehandler}
-              className="m-2 w-full p-3 border"
-              type="text"
-              placeholder="State"
-            />
+              <button
+                type="submit"
+                className="payment-btn"
+              >
+                PROCEED TO PAYMENT
+              </button>
+            </div>
+            
+            <div className="trust-badges mt-6">
+              <p>🔒 Secure Encrypted Payment</p>
+            </div>
           </div>
-
-          <div className="multifield flex gap-2">
-            <input
-              required
-              name="zipcode"
-              value={data.zipcode}
-              onChange={OnChangehandler}
-              className="m-2 w-full p-3 border"
-              type="text"
-              placeholder="Zip code"
-            />
-
-            <input
-              required
-              name="country"
-              value={data.country}
-              onChange={OnChangehandler}
-              className="m-2 w-full p-3 border"
-              type="text"
-              placeholder="Country"
-            />
-          </div>
-
-          <input
-            required
-            name="phone"
-            value={data.phone}
-            onChange={OnChangehandler}
-            className="m-2 w-full p-3 border"
-            type="text"
-            placeholder="Phone number"
-          />
         </div>
-
-        {/* RIGHT SIDE – CART TOTAL */}
-        <div className="placeorderright w-full md:w-[40%]">
-          <div className="cartotal flex flex-col gap-5 p-5 border rounded-lg shadow bg-white">
-            <h2 className="text-2xl font-semibold">Cart Total</h2>
-
-            <div className="cartotaldetail flex justify-between text-[#555]">
-              <p>Subtotal</p>
-              <p>₹{getcarttotalamount().toFixed(2)}</p>
-            </div>
-
-            <hr />
-
-            <div className="cartotaldetail flex justify-between text-[#555]">
-              <p>Delivery fee</p>
-              <p>₹{getcarttotalamount() > 0 ? 2 : 0}</p>
-            </div>
-
-            <hr />
-
-            <div className="cartotaldetail flex justify-between text-[#555]">
-              <b>Total</b>
-              <b>
-                ₹
-                {(
-                  getcarttotalamount() + (getcarttotalamount() > 0 ? 2 : 0)
-                ).toFixed(2)}
-              </b>
-            </div>
-
-            <button
-              type="submit"
-              className="bg-red-500 text-white w-full p-3 rounded-md hover:bg-red-600 transition"
-            >
-              Proceed to Payment
-            </button>
-          </div>
-        </div>
-      </div>
-    </form>
+      </form>
+    </div>
   );
 };
 

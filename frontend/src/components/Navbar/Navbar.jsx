@@ -1,125 +1,108 @@
 import React, { useState, useContext, useEffect } from "react";
-import { StoreContext } from "../../context/Storecontext";
+import { StoreContext } from "../../context/StoreContext";
 import { assets } from "../../assets/assets";
-import "./navbar.css";
+import "./Navbar.css";
 import { Link, useNavigate } from "react-router-dom";
 
 const Navbar = ({ setShowlogin }) => {
   const [menu, setmenu] = useState("Home");
   const navigate = useNavigate();
-  const { token, settoken } = useContext(StoreContext);
-
+  const { token, settoken, getcarttotalamount } = useContext(StoreContext);
   const [openDropdown, setOpenDropdown] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   const logout = () => {
     localStorage.removeItem("token");
     settoken("");
     navigate("/");
+    setOpenDropdown(false);
   };
 
-  // Close dropdown on outside click
   useEffect(() => {
     const handleClickOutside = () => setOpenDropdown(false);
     window.addEventListener("click", handleClickOutside);
     return () => window.removeEventListener("click", handleClickOutside);
   }, []);
 
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <div className="navbar flex gap-2.5 items-center justify-between relative">
-      <Link to="/">
-        <img src={assets.logo} width={150} alt="" />
-      </Link>
+    <nav className={`navbar ${scrolled ? "navbar--scrolled" : ""}`}>
+      <div className="navbar__inner">
+        <Link to="/" className="navbar__logo">
+          <img src={assets.logo} alt="Flavor Fiesta" />
+        </Link>
 
-      <ul className="navbar-menu flex list-none gap-5 text-gray-500">
-        <li
-          onClick={() => setmenu("Home")}
-          className={menu === "Home" ? "active" : ""}
-        >
-          Home
-        </li>
-
-        <li
-          onClick={() => {
-            setmenu("menu");
-            window.scrollTo({ top: 645, behavior: "smooth" });
-          }}
-          className={menu === "menu" ? "active" : ""}
-        >
-          Menu
-        </li>
-
-        <li
-          onClick={() => {
-            setmenu("mobile-app");
-            window.scrollTo({ top: 2265, behavior: "smooth" });
-          }}
-          className={menu === "mobile-app" ? "active" : ""}
-        >
-          Mobile-App
-        </li>
-
-        <li
-          onClick={() => {
-            setmenu("contact-app");
-            window.scrollTo({ top: 6000, behavior: "smooth" });
-          }}
-          className={menu === "contact-app" ? "active" : ""}
-        >
-          Contact Us
-        </li>
-      </ul>
-
-      {!token ? (
-        <button
-          onClick={() => setShowlogin(true)}
-          className="relative signin right-20 w-24 h-10 border border-red-500 text-red-500"
-        >
-          Sign In
-        </button>
-      ) : (
-        <div
-          className="nav-profile relative cursor-pointer z-50"
-          onClick={(e) => {
-            e.stopPropagation(); // keep dropdown open
-            setOpenDropdown(!openDropdown);
-          }}
-        >
-          <img src={assets.use} alt="" width={40} className="rounded-full" />
-
-          <ul
-            onClick={(e) => e.stopPropagation()} // prevent dropdown close
-            className={`absolute bg-white shadow-lg right-0 mt-2 w-40 p-2 rounded z-50 flex-col gap-2
-            ${openDropdown ? "flex" : "hidden"}`}
-          >
+        <ul className="navbar__menu">
+          {[
+            { key: "Home", label: "Home", action: () => { setmenu("Home"); window.scrollTo({ top: 0, behavior: "smooth" }); }},
+            { key: "menu", label: "Menu", action: () => { setmenu("menu"); document.getElementById("exploremenu")?.scrollIntoView({ behavior: "smooth" }); }},
+            { key: "mobile-app", label: "App", action: () => { setmenu("mobile-app"); document.getElementById("appdownload")?.scrollIntoView({ behavior: "smooth" }); }},
+            { key: "contact-app", label: "Contact", action: () => { setmenu("contact-app"); document.getElementById("footer")?.scrollIntoView({ behavior: "smooth" }); }},
+          ].map(({ key, label, action }) => (
             <li
-              onClick={() => navigate("/myorder")}
-              className="flex items-center gap-2 px-2 py-1 hover:bg-gray-100 rounded"
+              key={key}
+              onClick={action}
+              className={`navbar__menu-item ${menu === key ? "navbar__menu-item--active" : ""}`}
             >
-              <img src={assets.bag} width={20} />
-              <p>Orders</p>
+              {label}
             </li>
+          ))}
+        </ul>
 
-            <li
-              onClick={() => navigate("/Cart")}
-              className="flex items-center gap-2 px-2 py-1 hover:bg-gray-100 rounded"
+        <div className="navbar__actions">
+          <Link to="/Cart" className="navbar__cart">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+            </svg>
+            {getcarttotalamount() > 0 && <span className="navbar__cart-badge" />}
+          </Link>
+
+          {!token ? (
+            <button
+              onClick={() => setShowlogin(true)}
+              className="navbar__signin"
             >
-              <img src={assets.carti} width={20} />
-              <p>Cart</p>
-            </li>
-
-            <hr className="border-gray-300" />
-
-            <li
-              onClick={logout}
-              className="flex items-center gap-2 px-2 py-1 hover:bg-gray-100 rounded"
+              Sign In
+            </button>
+          ) : (
+            <div
+              className="navbar__profile"
+              onClick={(e) => {
+                e.stopPropagation();
+                setOpenDropdown(!openDropdown);
+              }}
             >
-              <img src={assets.lout} width={20} />
-              <p>Logout</p>
-            </li>
-          </ul>
+              <img src={assets.use} alt="Profile" className="navbar__avatar" />
+
+              <ul
+                onClick={(e) => e.stopPropagation()}
+                className={`navbar__dropdown ${openDropdown ? "navbar__dropdown--open" : ""}`}
+              >
+                <li onClick={() => { navigate("/Myorder"); setOpenDropdown(false); }} className="navbar__dropdown-item">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                  <span>My Orders</span>
+                </li>
+                <li onClick={() => { navigate("/Cart"); setOpenDropdown(false); }} className="navbar__dropdown-item">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                  <span>Cart</span>
+                </li>
+                <div className="navbar__dropdown-divider" />
+                <li onClick={logout} className="navbar__dropdown-item navbar__dropdown-item--danger">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                  <span>Logout</span>
+                </li>
+              </ul>
+            </div>
+          )}
         </div>
-      )}
-    </div>
+      </div>
+    </nav>
   );
 };
 

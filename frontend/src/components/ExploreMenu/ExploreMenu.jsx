@@ -1,26 +1,44 @@
 import React from 'react'
 import './ExploreMenu.css'
-import { menu_list} from '../../assets/assets'
-const Exploremenu = ({category,setCategory}) => {
+import { menu_list } from '../../assets/assets'
+
+const ExploreMenu = ({ category, setCategory }) => {
   return (
-    <div className='exploremenu gap-5' id='exploremenu'>
-        <h1 className='abc font-medium'>Explore our menu </h1>
-            <p className='explore-menu-text mt-2.5'>Explore our menu and indulge in the dish that tempts you the most.</p>  
-            <div className="explore-menu-list  ">
-                {menu_list.map((item,index)=>{
-                    return (
-                        <div onClick={()=>setCategory(prev=>prev===item.menu_name?"all":item.menu_name)} key={index} className='explore-menu-list-item '>
-                            <img className={category===item.menu_name?"active":""} src={item.menu_Image} alt="" />
-                            <p>{item.menu_name}</p>
-                            </div>
-                            
-                    )
-                })}
-                </div>  
-                  
-                <hr />
-    </div>
+    <section className='explore-menu' id='exploremenu'>
+      <div className="explore-menu__header">
+        <h2 className='explore-menu__title'>Explore Our Menu</h2>
+        <p className='explore-menu__text'>
+          Choose from a diverse selection of cuisines crafted with the finest ingredients
+        </p>
+      </div>
+
+      <div className="explore-menu__list-wrapper">
+        <div className="explore-menu__list">
+          {menu_list.map((item, index) => {
+            const isActive = category === item.menu_name;
+            const displayName = item.menu_name
+              .replace(/-/g, ' ')
+              .replace(/\b\w/g, c => c.toUpperCase());
+
+            return (
+              <div
+                onClick={() => setCategory(prev => prev === item.menu_name ? "all" : item.menu_name)}
+                key={index}
+                className={`explore-menu__item ${isActive ? 'explore-menu__item--active' : ''}`}
+              >
+                <div className={`explore-menu__img-wrap ${isActive ? 'explore-menu__img-wrap--active' : ''}`}>
+                  <img src={item.menu_Image} alt={displayName} />
+                </div>
+                <span className="explore-menu__label">{displayName}</span>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+
+      <div className="explore-menu__divider" />
+    </section>
   )
 }
 
-export default Exploremenu
+export default ExploreMenu
