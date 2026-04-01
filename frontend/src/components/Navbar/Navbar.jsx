@@ -3,20 +3,58 @@ import { StoreContext } from "../../context/StoreContext";
 import { assets } from "../../assets/assets";
 import "./Navbar.css";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Navbar = ({ setShowlogin }) => {
   const [menu, setmenu] = useState("Home");
   const navigate = useNavigate();
-  const { token, settoken, getcarttotalamount } = useContext(StoreContext);
+  const { token, settoken, getcarttotalamount, url } = useContext(StoreContext);
   const [openDropdown, setOpenDropdown] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [latestOrderStatus, setLatestOrderStatus] = useState("");
 
   const logout = () => {
     localStorage.removeItem("token");
     settoken("");
+    setLatestOrderStatus("");
     navigate("/");
     setOpenDropdown(false);
   };
+
+  const fetchLatestOrder = async () => {
+    if (token) {
+      try {
+        const response = await axios.post(
+          url + "/api/order/userorders",
+          {},
+          { headers: { "Authorization": `Bearer ${token}` } }
+        );
+        const orders = response.data.data;
+        if (orders && orders.length > 0) {
+          // Find the latest order that is NOT delivered
+          const sortedOrders = [...orders].reverse();
+          const activeOrder = sortedOrders.find(o => o.status.toLowerCase() !== "delivered");
+          if (activeOrder) {
+            setLatestOrderStatus(activeOrder.status);
+          } else {
+            setLatestOrderStatus("");
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching order status:", error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (token) {
+      fetchLatestOrder();
+      const interval = setInterval(fetchLatestOrder, 60000); // Check every minute
+      return () => clearInterval(interval);
+    } else {
+      setLatestOrderStatus("");
+    }
+  }, [token]);
 
   useEffect(() => {
     const handleClickOutside = () => setOpenDropdown(false);
@@ -30,30 +68,32 @@ const Navbar = ({ setShowlogin }) => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const menuItems = [
+    { key: "Home", label: "Home", action: () => { setmenu("Home"); navigate("/"); window.scrollTo({ top: 0, behavior: "smooth" }); }},
+    { key: "menu", label: "Menu", action: () => { setmenu("menu"); if(window.location.pathname !== "/") navigate("/"); setTimeout(() => document.getElementById("exploremenu")?.scrollIntoView({ behavior: "smooth" }), 100); }},
+    token && { key: "myorder", label: latestOrderStatus ? `Status: ${latestOrderStatus}` : "My Order", action: () => { navigate("/Myorder"); setmenu("myorder"); }},
+    { key: "mobile-app", label: "App", action: () => { setmenu("mobile-app"); if(window.location.pathname !== "/") navigate("/"); setTimeout(() => document.getElementById("appdownload")?.scrollIntoView({ behavior: "smooth" }), 100); }},
+    { key: "contact-app", label: "Contact", action: () => { setmenu("contact-app"); if(window.location.pathname !== "/") navigate("/"); setTimeout(() => document.getElementById("footer")?.scrollIntoView({ behavior: "smooth" }), 100); }},
+  ].filter(Boolean);
+
   return (
     <nav className={`navbar ${scrolled ? "navbar--scrolled" : ""}`}>
       <div className="navbar__inner">
         <Link to="/" className="navbar__logo">
           <img src={assets.logo} alt="Flavor Fiesta" />
         </Link>
-
         <ul className="navbar__menu">
-          {[
-            { key: "Home", label: "Home", action: () => { setmenu("Home"); window.scrollTo({ top: 0, behavior: "smooth" }); }},
-            { key: "menu", label: "Menu", action: () => { setmenu("menu"); document.getElementById("exploremenu")?.scrollIntoView({ behavior: "smooth" }); }},
-            { key: "mobile-app", label: "App", action: () => { setmenu("mobile-app"); document.getElementById("appdownload")?.scrollIntoView({ behavior: "smooth" }); }},
-            { key: "contact-app", label: "Contact", action: () => { setmenu("contact-app"); document.getElementById("footer")?.scrollIntoView({ behavior: "smooth" }); }},
-          ].map(({ key, label, action }) => (
+          {menuItems.map(({ key, label, action }) => (
             <li
               key={key}
               onClick={action}
-              className={`navbar__menu-item ${menu === key ? "navbar__menu-item--active" : ""}`}
+              className={`navbar__menu-item ${menu === key ? "navbar__menu-item--active" : ""} ${key === 'myorder' && latestOrderStatus ? 'navbar__menu-item--status' : ''}`}
             >
+              {key === 'myorder' && latestOrderStatus && <span className="status-ping"></span>}
               {label}
             </li>
           ))}
         </ul>
-
         <div className="navbar__actions">
           <Link to="/Cart" className="navbar__cart">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -62,7 +102,6 @@ const Navbar = ({ setShowlogin }) => {
             </svg>
             {getcarttotalamount() > 0 && <span className="navbar__cart-badge" />}
           </Link>
-
           {!token ? (
             <button
               onClick={() => setShowlogin(true)}
@@ -79,7 +118,6 @@ const Navbar = ({ setShowlogin }) => {
               }}
             >
               <img src={assets.use} alt="Profile" className="navbar__avatar" />
-
               <ul
                 onClick={(e) => e.stopPropagation()}
                 className={`navbar__dropdown ${openDropdown ? "navbar__dropdown--open" : ""}`}

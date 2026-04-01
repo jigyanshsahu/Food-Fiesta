@@ -1,82 +1,100 @@
-import React, { useEffect, useState } from 'react'
-import axios from "axios"
-import { toast } from "react-toastify";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import './List.css';
 
-const List = ({url}) => {
- 
-  const [list, setlist] = useState([]);
+const List = ({ url }) => {
+  const [list, setList] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const fetchlist = async () => {
+  const fetchList = async () => {
     try {
+      setLoading(true);
       const response = await axios.get(`${url}/api/food/list`);
       if (response.data.success) {
-        setlist(response.data.data);
+        setList(response.data.data);
       } else {
-        toast.error("Error fetching list");
+        toast.error("Failed to fetch food list");
       }
     } catch (error) {
-      toast.error("Server error");
+      toast.error("Server error. Please check your connection.");
+    } finally {
+      setLoading(false);
     }
   };
-  const removefood = async(foodId) =>{
-        const response = await axios.post(`${url}/api/food/remove`,{id:foodId})
-        await fetchlist();
 
-}
+  const removeFood = async (foodId) => {
+    try {
+      const response = await axios.post(`${url}/api/food/remove`, { id: foodId });
+      if (response.data.success) {
+        toast.success("Item removed successfully");
+        await fetchList();
+      } else {
+        toast.error("Error removing item");
+      }
+    } catch (error) {
+      toast.error("Server error while removing item");
+    }
+  };
 
   useEffect(() => {
-    fetchlist();  
+    fetchList();
   }, []);
 
- return (
-  <div className="list add flex-col p-6">
+  return (
+    <div className="list-container animate-fade-in">
+      <header className="page-header">
+        <h1 className="page-title">Manage Food List</h1>
+        <p className="page-subtitle">View, track, and manage all your menu items</p>
+      </header>
 
-    <h2 className="text-3xl font-semibold mb-8 tracking-wide text-center">
-      All food Items
-    </h2>
-
-    <div className="listtable w-full bg-white shadow-lg rounded-xl overflow-hidden">
-
-      {/* Header */}
-      <div className="listtableformattitle grid grid-cols-4 bg-gray-100 px-6 py-4 
-                      text-lg font-semibold text-gray-700 border-b text-center">
-        <span>Image</span>
-        <span>Name</span>
-        <span>Price</span>
-        <span>Action</span>
-      </div>
-
-      {/* Rows */}
-      {list.map((item, index) => (
-        <div
-          key={index}
-          className="listtableformat grid grid-cols-4 items-center text-center 
-                     px-6 py-5 border-b hover:bg-gray-50 transition-all duration-200"
-        >
-          {/* Larger Image */}
-          <div className="flex justify-center">
-            <img
-              src={item.Image.startsWith("http") ? item.Image : `${url}/Images/${item.Image}`}
-              alt={item.name}
-              className="h-20 w-20 object-cover rounded-lg border shadow"
-            />
-          </div>
-
-          {/* Larger Text */}
-          <p className="font-semibold text-xl text-gray-800">{item.name}</p>
-
-          <p className="text-green-600 text-xl font-bold">${item.price}</p>
-
-          <p onClick={()=>removefood(item._id)} className="text-red-500 hover:cursor-pointer text-3xl font-bold hover:text-red-700 transition">
-            ×
-          </p>
+      <div className="list-table">
+        <div className="table-header">
+          <span>Image</span>
+          <span>Name</span>
+          <span>Category</span>
+          <span>Price</span>
+          <span>Action</span>
         </div>
-      ))}
 
+        {loading ? (
+          <div className="loading-state">
+            <div className="skeleton-row" />
+            <div className="skeleton-row" />
+            <div className="skeleton-row" />
+          </div>
+        ) : list.length === 0 ? (
+          <div className="empty-state">
+            <p>No food items found. Add some to get started!</p>
+          </div>
+        ) : (
+          list.map((item, index) => (
+            <div key={index} className="table-row">
+              <div className="food-img-container">
+                <img
+                  src={item.Image.startsWith("http") ? item.Image : `${url}/Images/${item.Image}`}
+                  alt={item.name}
+                  loading="lazy"
+                />
+              </div>
+              <span className="food-name">{item.name}</span>
+              <div className="category-wrapper">
+                <span className="food-category">{item.category || "General"}</span>
+              </div>
+              <span className="food-price">₹{item.price}</span>
+              <button 
+                onClick={() => removeFood(item._id)} 
+                className="remove-btn"
+                title="Remove item"
+              >
+                &times;
+              </button>
+            </div>
+          ))
+        )}
+      </div>
     </div>
-  </div>
-);
-
+  );
 };
 
 export default List;

@@ -218,3 +218,38 @@
     font-size: 0.85rem;
   }
 }
+
+.navbar__menu-item--status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--primary-glow) !important;
+  color: var(--primary) !important;
+  border: 1px solid var(--primary-light);
+  padding: 6px 14px;
+}
+
+.status-ping {
+  width: 8px;
+  height: 8px;
+  background-color: var(--primary);
+  border-radius: 50%;
+  position: relative;
+}
+
+.status-ping::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: var(--primary);
+  border-radius: 50%;
+  animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes ping {
+  75%, 100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}

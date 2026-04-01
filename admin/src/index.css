@@ -1,18 +1,128 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
-@import "tailwindcss";
-*{
-  padding: 0; margin: 0; box-sizing: border-box; font-family: Outfit;
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+  /* Colors */
+  --primary: #FF6B35;
+  --primary-dark: #E85A2A;
+  --primary-glow: rgba(255, 107, 53, 0.1);
+  --primary-light: #FF9B71;
+  
+  --secondary: #2D3047;
+  --accent: #4CC9F0;
+  
+  /* Neutral Palette */
+  --surface: #FFFFFF;
+  --surface-hover: #F8F9FA;
+  --background: #F4F7FE;
+  --border: #E2E8F0;
+  --border-light: #F1F5F9;
+  
+  /* Text */
+  --text-primary: #1A202C;
+  --text-secondary: #4A5568;
+  --text-muted: #718096;
+  --text-inverse: #FFFFFF;
+  
+  /* Semantic */
+  --success: #10B981;
+  --warning: #F59E0B;
+  --error: #EF4444;
+  --info: #3B82F6;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+  --shadow-glow: 0 10px 25px rgba(255, 107, 53, 0.2);
+
+  /* Borders & Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+
+  /* Animation */
+  --duration: 0.3s;
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
 }
-body{
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
   min-height: 100vh;
-  background-color: #fcfcfc;
+  background-color: var(--background);
+  color: var(--text-primary);
+  overflow-x: hidden;
 }
-a{
+
+a {
   text-decoration: none;
   color: inherit;
+  transition: all var(--duration) var(--ease);
 }
-hr{
+
+li {
+  list-style: none;
+}
+
+button {
+  cursor: pointer;
   border: none;
-  height: 1px;
-  background-color: #a9a9a9;
+  background: none;
+  font-family: inherit;
+  transition: all var(--duration) var(--ease);
 }
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s var(--ease) forwards;
+}
+
+/* Utility Cards */
+.card {
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--duration) var(--ease);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}

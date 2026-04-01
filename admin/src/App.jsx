@@ -7,31 +7,28 @@ import Add from './pages/Add/Add'
 import Order from "./pages/Order/Orders";
 import './App.css'
 import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const App = () => {
   const url = import.meta.env.VITE_BACKEND_URL || "http://localhost:4000"
 
   return (
-    <div className='h'>
-      <ToastContainer />
+    <div className='admin-app'>
+      <ToastContainer position="bottom-right" autoClose={3000} />
       <Navbar />
-
-      <div className="appcontent flex">
+      <div className="admin-content">
         <Sidebar />
-
-        <Routes>
-          {/* Default route */}
-          <Route path='/' element={<List url={url} />} />
-
-          <Route path='/add' element={<Add url={url} />} />
-          <Route path='/list' element={<List url={url} />} />
-          {/* Corrected orders route */}
-          <Route path='/orders' element={<Order url={url} />} />
-        </Routes>
+        <main className="main-content">
+          <Routes>
+            <Route path='/' element={<List url={url} />} />
+            <Route path='/add' element={<Add url={url} />} />
+            <Route path='/list' element={<List url={url} />} />
+            <Route path='/orders' element={<Order url={url} />} />
+          </Routes>
+        </main>
       </div>
     </div>
   )
 }
 
 export default App
-  

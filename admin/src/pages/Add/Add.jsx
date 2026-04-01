@@ -2,115 +2,156 @@ import React, { useState } from "react";
 import { assets } from "../../assets/assets";
 import axios from "axios";
 import { toast } from "react-toastify";
+import "./Add.css";
 
-const Add = ({url}) => {
-
-
-  const [Image, setImage] = useState(false);
-  const [data, setdata] = useState({
+const Add = ({ url }) => {
+  const [image, setImage] = useState(false);
+  const [data, setData] = useState({
     name: "",
     description: "",
     price: "",
+    category: "Salad",
   });
+  const [loading, setLoading] = useState(false);
 
-  const onchangehandler = (event) => {
+  const onChangeHandler = (event) => {
     const name = event.target.name;
     const value = event.target.value;
-    setdata(prev => ({ ...prev, [name]: value }));
+    setData((prev) => ({ ...prev, [name]: value }));
   };
 
- const onsubmithandler = async (event) => {
-  event.preventDefault();
+  const onSubmitHandler = async (event) => {
+    event.preventDefault();
+    setLoading(true);
 
-  const formdata = new FormData();
-  formdata.append("name", data.name);
-  formdata.append("description", data.description);
-  formdata.append("price", Number(data.price));
-  formdata.append("Image", Image);   // ✅ Corrected
+    try {
+      const formData = new FormData();
+      formData.append("name", data.name);
+      formData.append("description", data.description);
+      formData.append("price", Number(data.price));
+      formData.append("category", data.category);
+      formData.append("Image", image);
 
-  const response = await axios.post(`${url}/api/food/add`, formdata);
+      const response = await axios.post(`${url}/api/food/add`, formData);
 
-  if (response.data.success) {
-    setdata({
-      name: "",
-      description: "",
-      price: "",
-    });
-    setImage(false);
-    toast.success(response.data.message);
-  }
-  else{
-    toast.error(response.data.message)
-  }
-};
+      if (response.data.success) {
+        setData({
+          name: "",
+          description: "",
+          price: "",
+          category: "Salad",
+        });
+        setImage(false);
+        toast.success(response.data.message);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error("An error occurred. Please check your network.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className="add p-6 w-full flex justify-center">
-      <form onSubmit={onsubmithandler} className="w-full max-w-lg bg-white shadow-lg rounded-2xl p-6 flex flex-col gap-6">
+    <div className="add-container animate-fade-in">
+      <header className="page-header">
+        <h1 className="page-title">Add New Dish</h1>
+        <p className="page-subtitle">Add a scrumptious meal to your menu</p>
+      </header>
 
-        <div className="flex flex-col gap-3">
-          <p className="font-semibold text-lg">Upload Image</p>
-
-          <label
-            htmlFor="Image"
-            className="cursor-pointer border-2 border-dashed rounded-xl flex justify-center items-center h-48 hover:bg-gray-50 transition"
-          >
-            <img
-              className="h-40 object-contain opacity-70"
-              src={Image ? URL.createObjectURL(Image) : assets.ori}
-              alt=""
-            />
+      <form onSubmit={onSubmitHandler} className="add-form-card">
+        <div className="form-section">
+          <label className="form-label">Product Image</label>
+          <label htmlFor="image" className="image-upload-wrapper">
+            {image ? (
+              <img
+                src={URL.createObjectURL(image)}
+                alt="Preview"
+                className="preview-img"
+              />
+            ) : (
+              <>
+                <img className="upload-icon" src={assets.upload_area || assets.ori} alt="Upload" />
+                <p className="text-muted">Click or drag to upload image</p>
+              </>
+            )}
           </label>
-
-          <input 
+          <input
             onChange={(e) => setImage(e.target.files[0])}
             type="file"
-            id="Image"
+            id="image"
             hidden
             required
           />
         </div>
 
-        <div className="flex flex-col gap-2">
-          <p className="font-semibold">Product Name</p>
+        <div className="form-section">
+          <label className="form-label" htmlFor="name">Product Name</label>
           <input
-            onChange={onchangehandler}
+            onChange={onChangeHandler}
             value={data.name}
             type="text"
             name="name"
-            placeholder="Type here..."
-            className="border p-3 rounded-lg outline-none focus:ring-2 focus:ring-black"
+            id="name"
+            placeholder="e.g. Delicious Pasta"
+            className="input-field"
+            required
           />
         </div>
 
-        <div className="flex flex-col gap-2">
-          <p className="font-semibold">Product Description</p>
+        <div className="form-section">
+          <label className="form-label" htmlFor="description">Product Description</label>
           <textarea
-            onChange={onchangehandler}
+            onChange={onChangeHandler}
             value={data.description}
             name="description"
-            rows="5"
-            placeholder="Write product details..."
-            className="border p-3 rounded-lg outline-none focus:ring-2 focus:ring-black"
+            id="description"
+            rows="4"
+            placeholder="Tell us more about the dish..."
+            className="textarea-field"
+            required
           ></textarea>
         </div>
 
-        <div className="flex flex-col gap-2">
-          <p className="font-semibold">Product Price</p>
-          <input
-            onChange={onchangehandler}
-            value={data.price}
-            type="number"
-            name="price"
-            placeholder="$20"
-            className="border p-3 rounded-lg outline-none focus:ring-2 focus:ring-black"
-          />
+        <div className="form-row">
+          <div className="form-section">
+            <label className="form-label" htmlFor="category">Product Category</label>
+            <select
+              name="category"
+              id="category"
+              onChange={onChangeHandler}
+              value={data.category}
+              className="select-field"
+            >
+              <option value="Salad">Salad</option>
+              <option value="Rolls">Rolls</option>
+              <option value="Deserts">Deserts</option>
+              <option value="Sandwich">Sandwich</option>
+              <option value="Cake">Cake</option>
+              <option value="Pure Veg">Pure Veg</option>
+              <option value="Pasta">Pasta</option>
+              <option value="Noodles">Noodles</option>
+            </select>
+          </div>
+
+          <div className="form-section">
+            <label className="form-label" htmlFor="price">Product Price (₹)</label>
+            <input
+              onChange={onChangeHandler}
+              value={data.price}
+              type="number"
+              name="price"
+              id="price"
+              placeholder="e.g. 150"
+              className="input-field"
+              required
+            />
+          </div>
         </div>
 
-        <button
-          type="submit"
-          className="bg-black text-white font-semibold py-3 rounded-xl hover:bg-gray-800 transition"
-        >
-          ADD PRODUCT
+        <button type="submit" className="submit-btn" disabled={loading}>
+          {loading ? "Adding..." : "Add Product"}
         </button>
       </form>
     </div>
