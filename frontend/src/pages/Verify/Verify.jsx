@@ -15,6 +15,7 @@ const Verify = () => {
 
   const verifyPayment = async () => {
     try {
+      console.log("Verifying payment with:", { success, orderid });
       const response = await axios.post(url + "/api/order/verify", {
         success,
         orderid
@@ -23,9 +24,11 @@ const Verify = () => {
       if (response.data.success) {
         navigate("/Myorder");
       } else {
+        console.warn("Payment verification failed on backend:", response.data.message);
         navigate("/");
       }
     } catch (error) {
+      console.error("Payment verification error:", error);
       navigate("/");
     }
   };
