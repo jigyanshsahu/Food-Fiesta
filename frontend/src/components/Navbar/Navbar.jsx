@@ -2,16 +2,21 @@ import React, { useState, useContext, useEffect } from "react";
 import { StoreContext } from "../../context/StoreContext";
 import { assets } from "../../assets/assets";
 import "./Navbar.css";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 
 const Navbar = ({ setShowlogin }) => {
-  const [menu, setmenu] = useState("Home");
   const navigate = useNavigate();
-  const { token, settoken, getcarttotalamount, url } = useContext(StoreContext);
+  const location = useLocation();
+  const { token, settoken, getcarttotalamount, cartitem, url, setIsCartDrawerOpen } = useContext(StoreContext);
   const [openDropdown, setOpenDropdown] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [latestOrderStatus, setLatestOrderStatus] = useState("");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Total cart item count & total amount
+  const cartCount = Object.values(cartitem || {}).reduce((a, b) => a + b, 0);
+  const cartTotal = getcarttotalamount();
 
   const logout = () => {
     localStorage.removeItem("token");
@@ -27,13 +32,12 @@ const Navbar = ({ setShowlogin }) => {
         const response = await axios.post(
           url + "/api/order/userorders",
           {},
-          { headers: { "Authorization": `Bearer ${token}` } }
+          { headers: { token } }
         );
         const orders = response.data.data;
         if (orders && orders.length > 0) {
-          // Find the latest order that is NOT delivered
           const sortedOrders = [...orders].reverse();
-          const activeOrder = sortedOrders.find(o => o.status.toLowerCase() !== "delivered");
+          const activeOrder = sortedOrders.find(o => o.status?.toLowerCase() !== "delivered");
           if (activeOrder) {
             setLatestOrderStatus(activeOrder.status);
           } else {
@@ -47,13 +51,25 @@ const Navbar = ({ setShowlogin }) => {
   };
 
   useEffect(() => {
-    if (token) {
-      fetchLatestOrder();
-      const interval = setInterval(fetchLatestOrder, 60000); // Check every minute
-      return () => clearInterval(interval);
-    } else {
+    if (!token) {
       setLatestOrderStatus("");
+      return;
     }
+    fetchLatestOrder();
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") fetchLatestOrder();
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    const interval = setInterval(() => {
+      if (document.visibilityState === "visible") fetchLatestOrder();
+    }, 60000);
+
+    return () => {
+      clearInterval(interval);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
   }, [token]);
 
   useEffect(() => {
@@ -63,45 +79,98 @@ const Navbar = ({ setShowlogin }) => {
   }, []);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
+    const handleScroll = () => setScrolled(window.scrollY > 15);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const getActiveTab = () => {
+    const path = location.pathname;
+    if (path === "/") return "Home";
+    if (path === "/menu") return "menu";
+    if (path === "/about") return "about";
+    if (path === "/myorders") return "myorder";
+    return "";
+  };
+
+  const activeTab = getActiveTab();
+
   const menuItems = [
-    { key: "Home", label: "Home", action: () => { setmenu("Home"); navigate("/"); window.scrollTo({ top: 0, behavior: "smooth" }); }},
-    { key: "menu", label: "Menu", action: () => { setmenu("menu"); if(window.location.pathname !== "/") navigate("/"); setTimeout(() => document.getElementById("exploremenu")?.scrollIntoView({ behavior: "smooth" }), 100); }},
-    token && { key: "myorder", label: latestOrderStatus ? `Status: ${latestOrderStatus}` : "My Order", action: () => { navigate("/Myorder"); setmenu("myorder"); }},
-    { key: "mobile-app", label: "App", action: () => { setmenu("mobile-app"); if(window.location.pathname !== "/") navigate("/"); setTimeout(() => document.getElementById("appdownload")?.scrollIntoView({ behavior: "smooth" }), 100); }},
-    { key: "contact-app", label: "Contact", action: () => { setmenu("contact-app"); if(window.location.pathname !== "/") navigate("/"); setTimeout(() => document.getElementById("footer")?.scrollIntoView({ behavior: "smooth" }), 100); }},
+    { key: "Home",    label: "Home",    action: () => navigate("/") },
+    { key: "menu",   label: "Menu",    action: () => navigate("/menu") },
+    token && { key: "myorder", label: latestOrderStatus ? `Status: ${latestOrderStatus}` : "My Orders", action: () => navigate("/myorders") },
+    { key: "about",  label: "About Us", action: () => navigate("/about") },
   ].filter(Boolean);
+
+  const handleCartClick = (e) => {
+    e.preventDefault();
+    if (location.pathname === "/cart") {
+      // If already on cart page, stay there
+      return;
+    }
+    // Otherwise open slide-over cart drawer
+    setIsCartDrawerOpen(true);
+  };
 
   return (
     <nav className={`navbar ${scrolled ? "navbar--scrolled" : ""}`}>
       <div className="navbar__inner">
+        
+        {/* Brand Logo */}
         <Link to="/" className="navbar__logo">
-          <img src={assets.logo} alt="Flavor Fiesta" />
+          <img src={assets.logo} alt="Food Fiesta" />
         </Link>
-        <ul className="navbar__menu">
+
+        {/* Deliver To Location Widget */}
+        <div className="navbar__location">
+          <div className="navbar__location-icon">📍</div>
+          <div className="navbar__location-info">
+            <span className="navbar__location-label">DELIVER TO</span>
+            <span className="navbar__location-val">Downtown, NY • ⚡ 25-30 min</span>
+          </div>
+        </div>
+
+        {/* Center Nav Links */}
+        <ul className={`navbar__menu ${mobileMenuOpen ? 'navbar__menu--open' : ''}`}>
           {menuItems.map(({ key, label, action }) => (
             <li
               key={key}
-              onClick={action}
-              className={`navbar__menu-item ${menu === key ? "navbar__menu-item--active" : ""} ${key === 'myorder' && latestOrderStatus ? 'navbar__menu-item--status' : ''}`}
+              onClick={() => { action(); setMobileMenuOpen(false); }}
+              className={`navbar__menu-item ${activeTab === key ? "navbar__menu-item--active" : ""} ${key === 'myorder' && latestOrderStatus ? 'navbar__menu-item--status' : ''}`}
             >
               {key === 'myorder' && latestOrderStatus && <span className="status-ping"></span>}
               {label}
             </li>
           ))}
         </ul>
+
+        {/* Right Action Items */}
         <div className="navbar__actions">
-          <Link to="/Cart" className="navbar__cart">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
-              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
-            </svg>
-            {getcarttotalamount() > 0 && <span className="navbar__cart-badge" />}
-          </Link>
+          {/* Hamburger Icon */}
+          <button
+            className="navbar__hamburger"
+            onClick={() => setMobileMenuOpen(prev => !prev)}
+            aria-label="Toggle navigation menu"
+          >
+            <span /><span /><span />
+          </button>
+
+          {/* Cart Pill with Icon + Count + Amount */}
+          <button onClick={handleCartClick} className="navbar__cart-btn" aria-label="Shopping Cart">
+            <div className="navbar__cart-icon-wrap">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+                <line x1="3" y1="6" x2="21" y2="6"/>
+                <path d="M16 10a4 4 0 0 1-8 0"/>
+              </svg>
+              {cartCount > 0 && <span className="navbar__cart-badge">{cartCount}</span>}
+            </div>
+            <span className="navbar__cart-text">
+              {cartTotal > 0 ? `₹${cartTotal}` : "Cart"}
+            </span>
+          </button>
+
+          {/* User Sign In / Profile Dropdown */}
           {!token ? (
             <button
               onClick={() => setShowlogin(true)}
@@ -117,18 +186,18 @@ const Navbar = ({ setShowlogin }) => {
                 setOpenDropdown(!openDropdown);
               }}
             >
-              <img src={assets.use} alt="Profile" className="navbar__avatar" />
+              <img src={assets.use} alt="User Profile" className="navbar__avatar" />
               <ul
                 onClick={(e) => e.stopPropagation()}
                 className={`navbar__dropdown ${openDropdown ? "navbar__dropdown--open" : ""}`}
               >
-                <li onClick={() => { navigate("/Myorder"); setOpenDropdown(false); }} className="navbar__dropdown-item">
+                <li onClick={() => { navigate("/myorders"); setOpenDropdown(false); }} className="navbar__dropdown-item">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
                   <span>My Orders</span>
                 </li>
-                <li onClick={() => { navigate("/Cart"); setOpenDropdown(false); }} className="navbar__dropdown-item">
+                <li onClick={() => { setIsCartDrawerOpen(true); setOpenDropdown(false); }} className="navbar__dropdown-item">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-                  <span>Cart</span>
+                  <span>Quick Cart ({cartCount})</span>
                 </li>
                 <div className="navbar__dropdown-divider" />
                 <li onClick={logout} className="navbar__dropdown-item navbar__dropdown-item--danger">
@@ -139,6 +208,7 @@ const Navbar = ({ setShowlogin }) => {
             </div>
           )}
         </div>
+
       </div>
     </nav>
   );

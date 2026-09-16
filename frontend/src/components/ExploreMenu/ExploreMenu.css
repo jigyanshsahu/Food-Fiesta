@@ -1,57 +1,65 @@
-/* =============================================
-   EXPLORE MENU — Category Strip
-   ============================================= */
-
+/* ── Explore Menu Section ────────────────────────── */
 .explore-menu {
-  padding: 60px 0 20px;
+  padding: 40px 0 20px;
 }
 
 .explore-menu__header {
-  margin-bottom: 32px;
+  margin-bottom: 28px;
+}
+
+.explore-menu__badge {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--primary);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .explore-menu__title {
-  font-family: 'Poppins', sans-serif;
-  font-size: 2.2rem;
-  font-weight: 700;
+  font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+  font-weight: 800;
   color: var(--text-primary);
-  margin-bottom: 8px;
+  margin-top: 4px;
 }
 
 .explore-menu__text {
-  font-size: 1.05rem;
+  font-size: 0.98rem;
   color: var(--text-secondary);
-  max-width: 500px;
+  margin-top: 6px;
+  max-width: 600px;
 }
 
-/* Scrollable List */
+/* Horizontal List Container */
 .explore-menu__list-wrapper {
   overflow-x: auto;
-  padding-bottom: 8px;
-  scrollbar-width: none;
+  padding: 12px 4px 20px;
+  margin: 0 -4px;
 }
-
 .explore-menu__list-wrapper::-webkit-scrollbar {
-  display: none;
+  height: 6px;
+}
+.explore-menu__list-wrapper::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: var(--radius-full);
 }
 
 .explore-menu__list {
   display: flex;
-  gap: 24px;
-  padding: 8px 4px;
+  align-items: center;
+  gap: 20px;
+  width: max-content;
 }
 
-/* Individual Category Item */
+/* Category Item Card */
 .explore-menu__item {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 10px;
   cursor: pointer;
-  flex-shrink: 0;
-  transition: transform var(--duration) var(--ease);
+  transition: transform 0.25s var(--ease);
+  user-select: none;
 }
-
 .explore-menu__item:hover {
   transform: translateY(-4px);
 }
@@ -60,79 +68,59 @@
   width: 90px;
   height: 90px;
   border-radius: 50%;
-  overflow: hidden;
-  border: 3px solid transparent;
-  transition: all var(--duration) var(--ease);
+  padding: 4px;
+  background: var(--surface);
+  border: 2px solid var(--border);
   box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: all 0.25s var(--ease);
 }
 
 .explore-menu__img-wrap img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform var(--duration) var(--ease);
+  border-radius: 50%;
+  transition: transform 0.3s var(--ease);
 }
 
-.explore-menu__item:hover .explore-menu__img-wrap img {
-  transform: scale(1.1);
+.explore-menu__all-icon {
+  font-size: 2rem;
 }
 
+.explore-menu__item:hover .explore-menu__img-wrap {
+  border-color: var(--primary-light);
+  box-shadow: 0 8px 20px rgba(255, 82, 0, 0.15);
+}
+
+/* Active State */
+.explore-menu__item--active .explore-menu__img-wrap,
 .explore-menu__img-wrap--active {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 4px var(--primary-glow), var(--shadow-md);
+  border-color: var(--primary) !important;
+  background: #FFF2EC !important;
+  box-shadow: 0 8px 24px rgba(255, 82, 0, 0.3) !important;
+}
+
+.explore-menu__item--active img {
+  transform: scale(1.08);
 }
 
 .explore-menu__label {
-  font-size: 0.85rem;
-  font-weight: 500;
+  font-size: 0.9rem;
+  font-weight: 700;
   color: var(--text-secondary);
-  text-align: center;
-  max-width: 90px;
+  transition: color 0.2s;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  transition: color var(--duration) var(--ease);
+}
+
+.explore-menu__item:hover .explore-menu__label {
+  color: var(--primary);
 }
 
 .explore-menu__item--active .explore-menu__label {
   color: var(--primary);
-  font-weight: 600;
-}
-
-/* Divider */
-.explore-menu__divider {
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--border), transparent);
-  margin-top: 24px;
-}
-
-/* =============================================
-   RESPONSIVE
-   ============================================= */
-
-@media (max-width: 768px) {
-  .explore-menu {
-    padding: 40px 0 16px;
-  }
-
-  .explore-menu__title {
-    font-size: 1.6rem;
-  }
-
-  .explore-menu__text {
-    font-size: 0.92rem;
-  }
-
-  .explore-menu__img-wrap {
-    width: 72px;
-    height: 72px;
-  }
-
-  .explore-menu__label {
-    font-size: 0.78rem;
-  }
-
-  .explore-menu__list {
-    gap: 16px;
-  }
+  font-weight: 800;
 }

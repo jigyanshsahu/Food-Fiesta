@@ -1,0 +1,194 @@
+/* ── Order Confirmation Page ──────────────────── */
+.order-conf {
+  min-height: 75vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.order-conf__card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 56px 48px;
+  max-width: 620px;
+  width: 100%;
+  text-align: center;
+  box-shadow: var(--shadow-xl);
+}
+
+/* ── Animated Checkmark ──────────────────────── */
+.order-conf__icon {
+  margin-bottom: 24px;
+}
+
+.checkmark {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin: 0 auto;
+}
+
+.checkmark__circle {
+  stroke: var(--success);
+  stroke-width: 2.5;
+  stroke-dasharray: 166;
+  stroke-dashoffset: 166;
+  animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+
+.checkmark__check {
+  stroke: var(--success);
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 48;
+  stroke-dashoffset: 48;
+  animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.6s forwards;
+}
+
+@keyframes stroke {
+  100% { stroke-dashoffset: 0; }
+}
+
+/* ── Text Content ────────────────────────────── */
+.order-conf__title {
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+}
+
+.order-conf__subtitle {
+  color: var(--text-secondary);
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.order-conf__id {
+  display: inline-block;
+  background: #FFF2EC;
+  border: 1px solid rgba(255, 82, 0, 0.25);
+  color: var(--primary-dark);
+  font-size: 0.92rem;
+  font-weight: 700;
+  padding: 8px 24px;
+  border-radius: var(--radius-full);
+  margin-bottom: 36px;
+}
+
+/* ── Progress Tracker Stepper ─────────────────── */
+.order-conf__steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+
+.order-conf__step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-width: 72px;
+}
+
+.order-conf__step span {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #F3F4F6;
+  border: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+}
+
+.order-conf__step p {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.order-conf__step--done span {
+  background: #ECFDF5;
+  border-color: var(--success);
+  color: var(--success);
+  font-weight: 800;
+}
+.order-conf__step--done p {
+  color: var(--text-primary);
+}
+
+.order-conf__step--active span {
+  background: #FFF2EC;
+  border-color: var(--primary);
+  animation: pulseGlow 2s infinite;
+}
+.order-conf__step--active p {
+  color: var(--primary);
+  font-weight: 800;
+}
+
+.order-conf__step-line {
+  flex: 1;
+  height: 2px;
+  background: var(--border);
+  margin: 0 6px 20px;
+}
+
+.order-conf__step-line--done {
+  background: var(--success);
+}
+
+/* ── Buttons ──────────────────────────────────── */
+.order-conf__actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.order-conf__btn {
+  padding: 13px 30px;
+  border-radius: var(--radius-full);
+  font-weight: 800;
+  font-size: 0.95rem;
+  transition: all 0.2s var(--ease);
+}
+
+.order-conf__btn--primary {
+  background: var(--primary);
+  color: #FFFFFF;
+  box-shadow: var(--shadow-glow);
+}
+.order-conf__btn--primary:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(255, 82, 0, 0.4);
+}
+
+.order-conf__btn--secondary {
+  background: var(--surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+}
+.order-conf__btn--secondary:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: #FFF2EC;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 600px) {
+  .order-conf__card { padding: 36px 20px; }
+  .order-conf__step { min-width: 54px; }
+  .order-conf__step p { font-size: 0.65rem; }
+}

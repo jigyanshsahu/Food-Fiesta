@@ -1,158 +1,193 @@
-/* =============================================
-   PLACE ORDER PAGE — Checkout Form
-   ============================================= */
-
+/* ── Place Order / Checkout Page ───────────────── */
 .place-order-page {
-  padding: 40px 0 80px;
+  padding: 20px 0 60px;
 }
 
-.order-container {
-  max-width: 1280px;
+.checkout-container {
+  max-width: 1100px;
   margin: 0 auto;
 }
 
-.order-grid {
+/* Stepper Header */
+.checkout-stepper {
   display: flex;
-  flex-direction: row;
-  gap: 40px;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.checkout-step {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+.checkout-step.active {
+  color: var(--primary);
+}
+.checkout-step.completed {
+  color: var(--success);
+}
+.checkout-step-line {
+  width: 40px;
+  height: 2px;
+  background: var(--border);
 }
 
-/* Cards */
-.card {
-  background: var(--surface);
-  border-radius: var(--radius-lg);
-  padding: 40px;
-  border: 1px solid var(--border-light);
+/* Form Layout Grid */
+.order-grid {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 32px;
+  align-items: start;
 }
 
-.section-title {
-  font-family: 'Poppins', sans-serif;
-  font-size: 1.6rem;
-  font-weight: 800;
-  margin-bottom: 30px;
-  color: var(--text-primary);
-}
-
-/* Form Styles */
 .delivery-form {
-  flex: 2;
+  padding: 32px;
+}
+.form-header {
+  margin-bottom: 24px;
+}
+.form-header h2 {
+  font-size: 1.35rem;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+.form-header p {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+.input-group-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
 }
 
 .input-field {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  margin-bottom: 20px;
+  gap: 6px;
+  margin-bottom: 16px;
 }
-
 .input-field label {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--text-secondary);
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--text-primary);
 }
-
 .input-field input {
-  padding: 12px 16px;
-  background: var(--surface-hover);
+  padding: 11px 16px;
+  background: #F8F9FC;
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   font-size: 0.95rem;
-  transition: all 0.2s var(--ease);
+  color: var(--text-primary);
+  transition: all 0.2s;
 }
-
 .input-field input:focus {
-  outline: none;
   border-color: var(--primary);
-  background: white;
-  box-shadow: 0 0 0 4px var(--primary-glow);
+  background: #FFFFFF;
+  box-shadow: 0 0 0 3px rgba(255, 82, 0, 0.15);
 }
 
-.input-group-row {
+/* Delivery Instructions */
+.delivery-instructions {
+  margin-top: 10px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-light);
+}
+.instructions-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 10px;
+}
+.instructions-options {
   display: flex;
-  gap: 20px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.instruction-btn {
+  padding: 8px 14px;
+  background: #F3F4F6;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  transition: all 0.2s;
+}
+.instruction-btn.active {
+  background: #FFF2EC;
+  border-color: var(--primary);
+  color: var(--primary);
+  font-weight: 800;
 }
 
-.input-group-row .input-field {
-  flex: 1;
-}
-
-/* Summary Side */
-.order-summary-sidebar {
-  flex: 1;
+/* ── Sidebar Order Summary ─────────────────────── */
+.order-summary {
+  padding: 28px;
   position: sticky;
   top: 100px;
 }
-
-.order-summary {
-  width: 100%;
+.section-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-light);
 }
 
+.summary-details {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
 .summary-item {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 16px;
+  font-size: 0.95rem;
   color: var(--text-secondary);
-  font-size: 1rem;
 }
-
-.summary-divider {
-  height: 1px;
-  background: var(--border-light);
-  margin: 20px 0;
-}
-
 .summary-item.total {
-  color: var(--text-primary);
-  font-weight: 800;
   font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+.summary-item.total span:last-child {
+  color: var(--primary);
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.4rem;
 }
 
 .payment-btn {
   width: 100%;
-  padding: 16px;
+  padding: 14px;
   background: var(--primary);
-  color: white;
-  font-weight: 700;
+  color: #FFFFFF;
+  font-weight: 800;
+  font-size: 1rem;
   border-radius: var(--radius-md);
-  margin-top: 30px;
-  transition: all 0.3s;
   box-shadow: var(--shadow-glow);
+  transition: all 0.2s var(--ease);
 }
-
 .payment-btn:hover {
+  background: var(--primary-dark);
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(255, 107, 53, 0.35);
+  box-shadow: 0 10px 24px rgba(255, 82, 0, 0.4);
 }
 
 .trust-badges {
+  margin-top: 16px;
   text-align: center;
-  font-size: 0.85rem;
+  font-size: 0.78rem;
   color: var(--text-muted);
 }
 
-/* =============================================
-   RESPONSIVE
-   ============================================= */
-
-@media (max-width: 1024px) {
+@media (max-width: 900px) {
   .order-grid {
-    flex-direction: column;
-  }
-
-  .order-summary-sidebar {
-    width: 100%;
-    position: static;
-  }
-}
-
-@media (max-width: 640px) {
-  .input-group-row {
-    flex-direction: column;
-    gap: 0;
-  }
-
-  .card {
-    padding: 30px 20px;
+    grid-template-columns: 1fr;
   }
 }

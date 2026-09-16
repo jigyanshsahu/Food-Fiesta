@@ -1,75 +1,74 @@
-import React from 'react'
-import { assets } from '../../assets/assets'
-import './Footer.css'
+import React from "react";
+import { assets } from "../../assets/assets";
+import "./Footer.css";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
-  const currentYear = new Date().getFullYear();
-
   return (
-    <footer className='footer' id='footer'>
-      <div className='footer__container'>
-        <div className='footer__main-grid'>
-          {/* Logo & About */}
-          <div className="footer__section footer__section--brand">
-            <div className="footer__logo-wrap">
-              <img src={assets.logo} alt="Flavor Fiesta" />
-            </div>
-            <p className='footer__about'>
-              Elevating your dining experience with the freshest ingredients and fastest delivery. Flavor Fiesta brings your favorite cuisines right to your doorstep, day or night.
-            </p>
-            <div className="footer__socials">
-              <a href="#" className="footer__social-link" aria-label="Facebook">
-                <img src={assets.facebook} alt="" />
-              </a>
-              <a href="#" className="footer__social-link" aria-label="LinkedIn">
-                <img src={assets.linkdin} alt="" />
-              </a>
-              <a href="#" className="footer__social-link" aria-label="X">
-                <img src={assets.x} alt="" />
-              </a>
-            </div>
-          </div>
-
-          {/* Quick Links */}
-          <div className="footer__section">
-            <h4 className='footer__heading'>Company</h4>
-            <ul className='footer__links'>
-              <li><a href="/">Home</a></li>
-              <li><a href="#exploremenu">About Us</a></li>
-              <li><a href="#">Delivery</a></li>
-              <li><a href="#">Privacy Policy</a></li>
-            </ul>
-          </div>
-
-          {/* Contact Info */}
-          <div className="footer__section">
-            <h4 className='footer__heading'>Get In Touch</h4>
-            <ul className='footer__contact'>
-              <li>
-                <span className="icon">📞</span>
-                +91 1800 123 456
-              </li>
-              <li>
-                <span className="icon">✉️</span>
-                hello@flavorfiesta.com
-              </li>
-              <li>
-                <span className="icon">📍</span>
-                Tech Hub, Silicon Valley, CA
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        <div className="footer__bottom">
-          <hr className='footer__divider' />
-          <p className="footer__copyright">
-            © {currentYear} Flavor Fiesta. All Rights Reserved. Crafted with ❤️ for foodies.
+    <footer className="footer" id="footer">
+      <div className="footer__inner">
+        
+        {/* Column 1: Brand Info */}
+        <div className="footer__col footer__col--brand">
+          <Link to="/">
+            <img className="footer__logo" src={assets.logo} alt="Food Fiesta" />
+          </Link>
+          <p className="footer__desc">
+            Bringing your favorite restaurant dishes straight to your doorstep with express delivery, guaranteed freshness, and unmatched flavor.
           </p>
+          <div className="footer__socials">
+            <a href="#" aria-label="Facebook" className="footer__social-btn">📘</a>
+            <a href="#" aria-label="Instagram" className="footer__social-btn">📸</a>
+            <a href="#" aria-label="Twitter" className="footer__social-btn">🐦</a>
+          </div>
         </div>
+
+        {/* Column 2: Navigation */}
+        <div className="footer__col">
+          <h4 className="footer__col-title">Quick Links</h4>
+          <ul className="footer__links">
+            <li><Link to="/">Home</Link></li>
+            <li><Link to="/menu">Explore Menu</Link></li>
+            <li><Link to="/about">About Us</Link></li>
+            <li><Link to="/myorders">Order History</Link></li>
+            <li><Link to="/cart">Cart Summary</Link></li>
+          </ul>
+        </div>
+
+        {/* Column 3: Contact */}
+        <div className="footer__col">
+          <h4 className="footer__col-title">Customer Support</h4>
+          <ul className="footer__contact-list">
+            <li>📍 Tech Hub, Silicon Valley, CA</li>
+            <li>📞 +91 1800 123 4567</li>
+            <li>✉️ support@foodfiesta.com</li>
+            <li>⏰ Open 24/7 for delivery</li>
+          </ul>
+        </div>
+
+        {/* Column 4: Newsletter */}
+        <div className="footer__col">
+          <h4 className="footer__col-title">Subscribe & Save</h4>
+          <p className="footer__newsletter-desc">
+            Get <strong>₹100 OFF</strong> on your next meal order by subscribing to our secret deal newsletter!
+          </p>
+          <form onSubmit={(e) => e.preventDefault()} className="footer__newsletter-form">
+            <input type="email" placeholder="Enter your email" required />
+            <button type="submit">Join</button>
+          </form>
+          <div className="footer__payments">
+            <span>💳 Safe Payment Partners</span>
+          </div>
+        </div>
+
+      </div>
+
+      {/* Copyright Bar */}
+      <div className="footer__bottom">
+        <p>© 2026 Food Fiesta Inc. All Rights Reserved. Crafted for food lovers everywhere.</p>
       </div>
     </footer>
-  )
-}
+  );
+};
 
-export default Footer
+export default Footer;

@@ -6,15 +6,28 @@ const ExploreMenu = ({ category, setCategory }) => {
   return (
     <section className="explore-menu" id="exploremenu">
       <div className="explore-menu__header">
-        <h2 className="explore-menu__title">Explore Our Menu</h2>
+        <div className="explore-menu__title-wrap">
+          <span className="explore-menu__badge">CATEGORIES</span>
+          <h2 className="explore-menu__title">Explore What You Crave</h2>
+        </div>
         <p className="explore-menu__text">
-          Choose from a diverse selection of cuisines crafted with the finest
-          ingredients
+          Browse through our hand-crafted menu categories — click any category to filter top dishes.
         </p>
       </div>
 
       <div className="explore-menu__list-wrapper">
         <div className="explore-menu__list">
+          {/* ALL Categories Pill */}
+          <div
+            onClick={() => setCategory("all")}
+            className={`explore-menu__item ${category === "all" ? "explore-menu__item--active" : ""}`}
+          >
+            <div className={`explore-menu__img-wrap ${category === "all" ? "explore-menu__img-wrap--active" : ""}`}>
+              <span className="explore-menu__all-icon">🍽️</span>
+            </div>
+            <span className="explore-menu__label">All Dishes</span>
+          </div>
+
           {menu_list.map((item, index) => {
             const isActive = category === item.menu_name;
             const displayName = item.menu_name
@@ -25,7 +38,7 @@ const ExploreMenu = ({ category, setCategory }) => {
               <div
                 onClick={() =>
                   setCategory((prev) =>
-                    prev === item.menu_name ? "all" : item.menu_name,
+                    prev === item.menu_name ? "all" : item.menu_name
                   )
                 }
                 key={index}
@@ -34,7 +47,7 @@ const ExploreMenu = ({ category, setCategory }) => {
                 <div
                   className={`explore-menu__img-wrap ${isActive ? "explore-menu__img-wrap--active" : ""}`}
                 >
-                  <img src={item.menu_Image} alt={displayName} />
+                  <img src={item.menu_Image} alt={displayName} loading="lazy" />
                 </div>
                 <span className="explore-menu__label">{displayName}</span>
               </div>
@@ -42,8 +55,6 @@ const ExploreMenu = ({ category, setCategory }) => {
           })}
         </div>
       </div>
-
-      <div className="explore-menu__divider" />
     </section>
   );
 };

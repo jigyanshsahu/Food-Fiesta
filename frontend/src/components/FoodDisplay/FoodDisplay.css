@@ -1,67 +1,121 @@
-/* =============================================
-   FOOD DISPLAY — Grid Layout
-   ============================================= */
-
+/* ── Food Display Section ────────────────────────── */
 .food-display {
-  padding: 40px 0 60px;
+  padding: 30px 0 60px;
 }
 
 .food-display__header {
-  margin-bottom: 40px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+
+.food-display__badge {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--primary);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .food-display__title {
-  font-family: 'Poppins', sans-serif;
-  font-size: 2rem;
-  font-weight: 700;
+  font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+  font-weight: 800;
   color: var(--text-primary);
-  margin-bottom: 4px;
+  margin-top: 4px;
 }
 
 .food-display__subtitle {
-  font-size: 1rem;
+  font-size: 0.95rem;
   color: var(--text-secondary);
+  margin-top: 4px;
 }
 
+/* Filter Pills */
+.food-display__filter-pills {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.food-display__filter-btn {
+  padding: 8px 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  transition: all 0.2s var(--ease);
+  white-space: nowrap;
+}
+.food-display__filter-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: #FFF2EC;
+}
+
+.food-display__filter-btn--active {
+  background: var(--primary) !important;
+  color: #FFFFFF !important;
+  border-color: var(--primary) !important;
+  box-shadow: 0 4px 14px rgba(255, 82, 0, 0.3);
+}
+
+/* Responsive Food Grid */
 .food-display__list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 30px;
-  animation: fadeIn 0.8s var(--ease);
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 28px;
 }
 
+.food-display__item-wrapper {
+  height: 100%;
+}
+
+/* Empty State */
 .food-display__empty {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 80px 20px;
-  background: var(--surface);
-  border-radius: var(--radius-lg);
-  border: 1px dashed var(--border);
-  color: var(--text-secondary);
+  padding: 60px 20px;
   text-align: center;
+  border-radius: var(--radius-xl);
+  background: var(--surface);
+  border: 1px solid var(--border);
 }
 
 .food-display__empty-icon {
-  font-size: 3rem;
-  margin-bottom: 16px;
-  opacity: 0.5;
+  font-size: 3.5rem;
+  margin-bottom: 12px;
 }
 
-/* =============================================
-   RESPONSIVE
-   ============================================= */
+.food-display__empty h3 {
+  font-size: 1.3rem;
+  font-weight: 800;
+  margin-bottom: 6px;
+  color: var(--text-primary);
+}
+
+.food-display__empty p {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  max-width: 400px;
+}
 
 @media (max-width: 768px) {
-  .food-display {
-    padding: 30px 0 40px;
+  .food-display__header {
+    flex-direction: column;
+    align-items: flex-start;
   }
-
-  .food-display__title {
-    font-size: 1.5rem;
+  .food-display__filter-pills {
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 6px;
   }
-
   .food-display__list {
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     gap: 20px;

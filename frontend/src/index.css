@@ -1,66 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap');
 @import "tailwindcss";
 
 /* =============================================
-   FLAVOR FIESTA — DESIGN SYSTEM
+   FOOD FIESTA — REAL FOOD SERVICE DESIGN SYSTEM
+   Modern, Fresh, High-Converting & Ultra-Clean
    ============================================= */
 
+
+/* ─── CSS Variables ──────────────────────────── */
 :root {
-  /* Primary Palette */
-  --primary: #FF6B35;
-  --primary-dark: #E55A2B;
-  --primary-light: #FF8C5A;
-  --primary-glow: rgba(255, 107, 53, 0.15);
+  /* Brand Palette (Fresh Food Orange & Warm Charcoal) */
+  --primary:         #FF5200;
+  --primary-dark:    #E04800;
+  --primary-light:   #FF7A38;
+  --primary-glow:    rgba(255, 82, 0, 0.15);
+  --primary-subtle:  #FFF2EC;
 
-  /* Secondary */
-  --secondary: #1A1A2E;
-  --secondary-light: #2A2A3E;
+  /* Surfaces & Backgrounds */
+  --bg:              #F8F9FC;
+  --bg-primary:      #F8F9FC;
+  --surface:         #FFFFFF;
+  --surface-light:   #F3F4F6;
+  --surface-hover:   #F9FAFB;
 
-  /* Accent */
-  --accent: #2EC4B6;
-  --accent-dark: #25A99D;
+  /* Backward-compat aliases */
+  --secondary:       #111827;
+  --secondary-light: #1F2937;
 
-  /* Neutrals */
-  --bg: #FAFAF5;
-  --surface: #FFFFFF;
-  --surface-hover: #F5F5F0;
-  --border: #E8E5DF;
-  --border-light: #F0EDE8;
+  /* Borders & Dividers */
+  --border:          #E5E7EB;
+  --border-light:    #F3F4F6;
+  --border-focus:    #FF5200;
 
-  /* Text */
-  --text-primary: #1A1A2E;
-  --text-secondary: #6B7280;
-  --text-muted: #9CA3AF;
-  --text-inverse: #FFFFFF;
+  /* Accents */
+  --accent:          #10B981; /* Fresh Veg Green */
+  --accent-dark:     #059669;
+  --accent-veg:      #10B981;
+  --accent-nonveg:   #EF4444;
+  --accent-star:     #F59E0B;
 
-  /* Status */
-  --success: #22C55E;
-  --warning: #F59E0B;
-  --error: #EF4444;
+  /* Typography Colors */
+  --text-primary:    #111827;
+  --text-secondary:  #4B5563;
+  --text-muted:      #9CA3AF;
+  --text-inverse:    #FFFFFF;
 
-  /* Shadows */
-  --shadow-sm: 0 1px 3px rgba(26, 26, 46, 0.06);
-  --shadow-md: 0 4px 12px rgba(26, 26, 46, 0.08);
-  --shadow-lg: 0 8px 30px rgba(26, 26, 46, 0.12);
-  --shadow-xl: 0 20px 50px rgba(26, 26, 46, 0.15);
-  --shadow-glow: 0 4px 20px rgba(255, 107, 53, 0.25);
+  /* Status Colors */
+  --success:         #10B981;
+  --warning:         #F59E0B;
+  --error:           #EF4444;
 
-  /* Radius */
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 24px;
-  --radius-full: 9999px;
+  /* Modern Elevation Shadows */
+  --shadow-sm:       0 2px 4px rgba(0, 0, 0, 0.04);
+  --shadow-md:       0 4px 12px rgba(0, 0, 0, 0.06);
+  --shadow-lg:       0 10px 30px -5px rgba(0, 0, 0, 0.08);
+  --shadow-xl:       0 20px 40px -10px rgba(0, 0, 0, 0.12);
+  --shadow-glow:     0 8px 24px rgba(255, 82, 0, 0.25);
 
-  /* Transitions */
-  --ease: cubic-bezier(0.4, 0, 0.2, 1);
-  --duration: 0.3s;
+  /* Border Radius */
+  --radius-sm:       8px;
+  --radius-md:       12px;
+  --radius-lg:       16px;
+  --radius-xl:       24px;
+  --radius-full:     9999px;
+
+  /* Motion */
+  --ease:            cubic-bezier(0.16, 1, 0.3, 1);
+  --duration:        0.3s;
 }
 
-/* =============================================
-   GLOBAL RESET & BASE
-   ============================================= */
-
-* {
+/* ─── Global Reset & Typography ──────────────── */
+*, *::before, *::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -72,146 +82,217 @@ html {
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   background-color: var(--bg);
   color: var(--text-primary);
-  line-height: 1.6;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Poppins', 'Inter', sans-serif;
+  font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
   font-weight: 700;
-  line-height: 1.2;
+  line-height: 1.25;
   color: var(--text-primary);
+  letter-spacing: -0.02em;
 }
 
 img {
   max-width: 100%;
+  height: auto;
   display: block;
 }
 
 a {
   text-decoration: none;
   color: inherit;
+  transition: color var(--duration) var(--ease);
 }
 
 button {
   cursor: pointer;
-  font-family: 'Inter', sans-serif;
+  font-family: inherit;
   border: none;
+  outline: none;
+  background: none;
+  transition: all var(--duration) var(--ease);
+}
+
+input, textarea, select {
+  font-family: inherit;
   outline: none;
 }
 
-input, textarea {
-  font-family: 'Inter', sans-serif;
-}
-
-/* =============================================
-   APP CONTAINER
-   ============================================= */
-
+/* ─── App Main Layout Container ──────────────── */
 .app {
-  width: min(90%, 1280px);
+  width: min(92%, 1280px);
   margin: 0 auto;
-  padding-top: 80px; /* space for fixed navbar */
+  padding-top: 90px;
+  min-height: calc(100vh - 250px);
 }
 
-/* =============================================
-   ANIMATIONS
-   ============================================= */
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes slideInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes scaleIn {
-  from {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-@keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-}
-
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-}
-
-.animate-fade-in-up {
-  animation: fadeInUp 0.6s var(--ease) forwards;
-}
-
-.animate-fade-in {
-  animation: fadeIn 0.5s var(--ease) forwards;
-}
-
-/* =============================================
-   SCROLLBAR
-   ============================================= */
-
+/* ─── Smooth Custom Scrollbar ────────────────── */
 ::-webkit-scrollbar {
   width: 8px;
 }
-
 ::-webkit-scrollbar-track {
   background: var(--bg);
 }
-
 ::-webkit-scrollbar-thumb {
-  background: var(--text-muted);
+  background: #CBD5E1;
   border-radius: var(--radius-full);
 }
-
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--text-secondary);
+  background: #94A3B8;
 }
 
-/* =============================================
-   RESPONSIVE
-   ============================================= */
+/* ─── Keyframes & Micro-Animations ───────────── */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -600px 0; }
+  100% { background-position: 600px 0; }
+}
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(30px) scale(0.95); }
+  to   { opacity: 1; transform: translateX(0) scale(1); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 82, 0, 0.4); }
+  50%      { box-shadow: 0 0 0 10px rgba(255, 82, 0, 0); }
+}
+
+@keyframes floatBounce {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-8px); }
+}
+
+/* Helper animation classes */
+.animate-fade-in    { animation: fadeIn 0.4s var(--ease) forwards; }
+.animate-fade-in-up { animation: fadeInUp 0.5s var(--ease) forwards; }
+.animate-scale-in   { animation: scaleIn 0.3s var(--ease) forwards; }
+
+/* ─── Card Utilities ─────────────────────────── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--duration) var(--ease);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+/* ─── Skeleton Shimmer Loader ────────────────── */
+.skeleton-shimmer {
+  background: linear-gradient(90deg, #E2E8F0 25%, #EDF2F7 50%, #E2E8F0 75%);
+  background-size: 1200px 100%;
+  animation: shimmer 1.5s infinite linear;
+}
+
+/* ─── Loading Spinner ────────────────────────── */
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3.5px solid var(--border);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.75s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ─── Toast Notifications ────────────────────── */
+.toast-container {
+  position: fixed;
+  top: 90px;
+  right: 24px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  border-radius: var(--radius-md);
+  min-width: 280px;
+  max-width: 380px;
+  background: var(--surface);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border);
+  pointer-events: all;
+  animation: toastIn 0.35s var(--ease) forwards;
+}
+
+.toast--success { border-left: 4px solid var(--success); }
+.toast--error   { border-left: 4px solid var(--error); }
+.toast--info    { border-left: 4px solid #3B82F6; }
+
+.toast__icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.toast--success .toast__icon { background: rgba(16, 185, 129, 0.15); color: var(--success); }
+.toast--error   .toast__icon { background: rgba(239, 68, 68, 0.15); color: var(--error); }
+.toast--info    .toast__icon { background: rgba(59, 130, 246, 0.15); color: #3B82F6; }
+
+.toast__message {
+  flex: 1;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.toast__close {
+  color: var(--text-muted);
+  font-size: 1.2rem;
+  transition: color 0.2s;
+}
+.toast__close:hover { color: var(--text-primary); }
+
+/* ─── Responsive Adjustments ─────────────────── */
 @media (max-width: 768px) {
   .app {
-    width: 95%;
-    padding-top: 70px;
+    width: 94%;
+    padding-top: 76px;
+  }
+  .toast-container {
+    right: 12px;
+    left: 12px;
+    top: 76px;
+  }
+  .toast {
+    min-width: unset;
+    max-width: unset;
   }
 }

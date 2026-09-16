@@ -1,235 +1,246 @@
-/* =============================================
-   MY ORDERS PAGE — Tracking View
-   ============================================= */
-
+/* ── My Orders Page ────────────────────────────── */
 .my-orders-page {
-  padding: 40px 0 80px;
-}
-
-.orders-container {
-  max-width: 1280px;
-  margin: 0 auto;
+  padding: 20px 0 60px;
 }
 
 .orders-header {
   display: flex;
+  align-items: flex-end;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 40px;
+  margin-bottom: 28px;
+}
+
+.orders-badge {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--primary);
+  letter-spacing: 0.08em;
 }
 
 .page-title {
-  font-family: 'Poppins', sans-serif;
-  font-size: 2.2rem;
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
   font-weight: 800;
   color: var(--text-primary);
+  margin-top: 2px;
 }
 
 .refresh-btn {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 20px;
+  padding: 9px 20px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-full);
-  font-weight: 600;
-  color: var(--text-secondary);
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-primary);
   transition: all 0.2s;
 }
-
 .refresh-btn:hover {
-  background: var(--surface-hover);
+  border-color: var(--primary);
   color: var(--primary);
+  background: #FFF2EC;
 }
 
 /* Loading & Empty States */
-.orders-loading {
+.orders-loading, .orders-error, .orders-empty {
+  padding: 50px 20px;
   text-align: center;
-  padding: 100px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.orders-empty .empty-icon {
+  font-size: 3.5rem;
+  margin-bottom: 12px;
+}
+.orders-empty h3 {
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+.orders-empty p {
   color: var(--text-secondary);
+  margin-bottom: 20px;
+}
+.orders-empty-btn {
+  padding: 10px 24px;
+  background: var(--primary);
+  color: #FFFFFF;
+  font-weight: 800;
+  border-radius: var(--radius-full);
 }
 
-.spinner {
-  display: inline-block;
-  width: 40px;
-  height: 40px;
-  border: 3px solid var(--border-light);
-  border-top-color: var(--primary);
-  border-radius: 50%;
-  animation: rotate 1s linear infinite;
-  margin-bottom: 16px;
+/* Orders List */
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 
-.orders-empty {
+.order-card {
+  padding: 24px;
+  border-radius: var(--radius-xl);
+}
+
+.order-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-light);
+  margin-bottom: 20px;
+}
+.order-card__id {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+.order-card__date {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-left: 6px;
+}
+.order-card__price {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--primary);
+  font-family: 'Outfit', sans-serif;
+}
+
+/* Visual Stepper Tracker Bar */
+.order-tracker {
+  background: #F8F9FC;
+  border-radius: var(--radius-lg);
+  padding: 18px 24px;
+  margin-bottom: 20px;
+  border: 1px solid var(--border-light);
+}
+
+.order-tracker__steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  position: relative;
+}
+
+.tracker-step {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 60px;
+  position: relative;
+  opacity: 0.4;
+  transition: all 0.3s;
 }
 
-.empty-icon {
-  font-size: 4rem;
-  margin-bottom: 20px;
-  opacity: 0.5;
-}
-
-.orders-empty h3 {
-  font-size: 1.5rem;
-  margin-bottom: 12px;
-}
-
-.orders-empty button {
-  margin-top: 24px;
-  padding: 12px 32px;
-  background: var(--primary);
-  color: white;
-  border-radius: var(--radius-full);
-  font-weight: 700;
-}
-
-/* Order Card */
-.order-card {
-  padding: 24px;
-  margin-bottom: 20px;
-  border: 1px solid var(--border-light);
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.order-card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-  border-color: var(--border);
-}
-
-.order-main {
-  display: flex;
-  align-items: center;
-  gap: 30px;
-}
-
-.order-icon-box {
-  width: 60px;
-  height: 60px;
-  background: var(--surface-hover);
-  border-radius: var(--radius-md);
+.tracker-step__icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: 2px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.order-icon-box img {
-  width: 32px;
-  height: 32px;
-}
-
-.order-details {
-  flex: 2;
-}
-
-.order-items-list {
-  font-size: 1.05rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: 4px;
-}
-
-.order-items-list small {
-  color: var(--primary);
-  margin-left: 4px;
-}
-
-.order-date {
-  font-size: 0.85rem;
-  color: var(--text-muted);
-}
-
-.order-stats {
-  flex: 1;
-  text-align: center;
-}
-
-.order-amount {
   font-size: 1.2rem;
-  font-weight: 800;
-  color: var(--text-primary);
+  margin-bottom: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  z-index: 2;
+  transition: all 0.3s;
 }
 
-.order-count {
-  font-size: 0.85rem;
+.tracker-step__label {
+  font-size: 0.8rem;
+  font-weight: 700;
   color: var(--text-secondary);
 }
 
-/* Status Badge */
-.order-status-box {
-  flex: 1;
+/* Completed & Active Stepper States */
+.step--completed {
+  opacity: 1;
+}
+.step--completed .tracker-step__icon {
+  background: #ECFDF5;
+  border-color: #10B981;
+  color: #10B981;
+}
+.step--completed .tracker-step__label {
+  color: var(--text-primary);
 }
 
-.status-badge {
-  display: inline-flex;
+.step--active {
+  opacity: 1;
+}
+.step--active .tracker-step__icon {
+  background: #FFF2EC;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(255, 82, 0, 0.2);
+  transform: scale(1.1);
+}
+.step--active .tracker-step__label {
+  color: var(--primary);
+  font-weight: 800;
+}
+
+/* Items Box */
+.order-card__items-box {
+  background: var(--surface-light);
+  padding: 14px 18px;
+  border-radius: var(--radius-md);
+  margin-bottom: 16px;
+}
+.order-items-label {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  display: block;
+  margin-bottom: 4px;
+}
+.order-items-list {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Card Footer */
+.order-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.order-status-badge {
+  display: flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 16px;
-  border-radius: var(--radius-full);
-  font-size: 0.85rem;
-  font-weight: 700;
-  background: #F3F4F6;
-  color: #4B5563;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
 }
-
-.status-badge .dot {
+.status-dot-pulse {
   width: 8px;
   height: 8px;
+  background: var(--primary);
   border-radius: 50%;
-  background: currentColor;
+  box-shadow: 0 0 0 4px rgba(255, 82, 0, 0.2);
 }
-
-/* Status colors */
-.status-badge.food-processing { background: #FEF3C7; color: #D97706; }
-.status-badge.out-for-delivery { background: #DBEAFE; color: #2563EB; }
-.status-badge.delivered { background: #D1FAE5; color: #059669; }
 
 .track-btn {
-  padding: 10px 24px;
-  background: var(--primary-glow);
-  color: var(--primary);
-  font-weight: 700;
-  border-radius: var(--radius-md);
-  transition: all 0.2s;
-}
-
-.track-btn:hover {
+  padding: 8px 20px;
   background: var(--primary);
-  color: white;
+  color: #FFFFFF;
+  font-weight: 700;
+  font-size: 0.85rem;
+  border-radius: var(--radius-full);
 }
-
-/* =============================================
-   RESPONSIVE
-   ============================================= */
-
-@media (max-width: 1024px) {
-  .order-main {
-    flex-wrap: wrap;
-    gap: 20px;
-  }
-
-  .order-icon-box {
-    display: none;
-  }
-
-  .order-details {
-    flex: 1 1 100%;
-  }
+.track-btn:hover {
+  background: var(--primary-dark);
 }
 
 @media (max-width: 640px) {
-  .order-main {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .status-badge {
-    justify-content: center;
+  .order-tracker__steps {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
   }
 }

@@ -1,0 +1,84 @@
+/* ── Menu Page ─────────────────────────────────── */
+.menu-page {
+  padding: 20px 0 60px;
+}
+
+.menu-page__hero {
+  text-align: center;
+  padding: 36px 20px 40px;
+  background: #FFFFFF;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  margin-bottom: 40px;
+  box-shadow: var(--shadow-sm);
+}
+
+.menu-page__badge {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--primary);
+  letter-spacing: 0.08em;
+  background: #FFF2EC;
+  padding: 5px 14px;
+  border-radius: var(--radius-full);
+}
+
+.menu-page__title {
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 800;
+  margin-top: 12px;
+  color: var(--text-primary);
+}
+.menu-page__title span {
+  color: var(--primary);
+}
+
+.menu-page__subtitle {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  max-width: 540px;
+  margin: 8px auto 24px;
+}
+
+/* Search Input */
+.menu-page__search {
+  position: relative;
+  max-width: 480px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+.menu-page__search svg {
+  position: absolute;
+  left: 16px;
+  color: var(--text-muted);
+}
+
+.menu-page__search-input {
+  width: 100%;
+  padding: 12px 44px;
+  background: #F8F9FC;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-full);
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  transition: all 0.2s;
+}
+.menu-page__search-input:focus {
+  border-color: var(--primary);
+  background: #FFFFFF;
+  box-shadow: 0 4px 16px rgba(255, 82, 0, 0.15);
+}
+
+.menu-page__search-clear {
+  position: absolute;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: var(--text-muted);
+}
+.menu-page__search-clear:hover {
+  color: var(--text-primary);
+}

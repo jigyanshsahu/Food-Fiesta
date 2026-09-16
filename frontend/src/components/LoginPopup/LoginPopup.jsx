@@ -2,11 +2,14 @@ import React, { useContext, useState } from "react";
 import { assets } from "../../assets/assets";
 import "./LoginPopup.css";
 import { StoreContext } from "../../context/StoreContext";
+import { useToast } from "../../context/ToastContext";
 import axios from "axios";
 
 const LoginPopup = ({ setShowlogin }) => {
   const { url, settoken } = useContext(StoreContext);
+  const toast = useToast();
   const [currentstate, setcurrentstate] = useState("Login");
+  const [loading, setLoading] = useState(false);
   const [data, setdata] = useState({
     name: "",
     email: "",
@@ -20,8 +23,9 @@ const LoginPopup = ({ setShowlogin }) => {
 
   const onlogin = async (event) => {
     event.preventDefault();
-    let newUrl = url;
+    if (loading) return;
 
+    let newUrl = url;
     if (currentstate === "Login") {
       newUrl += "/api/user/login";
     } else {
@@ -29,17 +33,21 @@ const LoginPopup = ({ setShowlogin }) => {
     }
 
     try {
+      setLoading(true);
       const response = await axios.post(newUrl, data);
       if (response.data.success) {
         settoken(response.data.token);
         localStorage.setItem("token", response.data.token);
         setShowlogin(false);
+        toast.success(currentstate === 'Login' ? 'Welcome back! 👋' : 'Account created! 🎉');
       } else {
-        alert(response.data.message);
+        toast.error(response.data.message);
       }
     } catch (error) {
       console.error(error);
-      alert("Something went wrong!");
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -105,8 +113,8 @@ const LoginPopup = ({ setShowlogin }) => {
           </div>
         </div>
 
-        <button type="submit" className="login-popup__submit-btn">
-          {currentstate === "Sign-Up" ? "Sign Up" : "Sign In"}
+        <button type="submit" className="login-popup__submit-btn" disabled={loading}>
+          {loading ? "Please wait..." : currentstate === "Sign-Up" ? "Sign Up" : "Sign In"}
         </button>
 
         <div className="login-popup__condition">

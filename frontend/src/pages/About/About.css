@@ -1,0 +1,143 @@
+/* ── About Page ─────────────────────────────────── */
+.about-page {
+  padding: 20px 0 60px;
+}
+
+.about-hero {
+  text-align: center;
+  padding: 40px 20px 50px;
+  position: relative;
+}
+
+.about-hero__badge {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--primary);
+  letter-spacing: 0.08em;
+  background: #FFF2EC;
+  padding: 6px 16px;
+  border-radius: var(--radius-full);
+}
+
+.about-hero__title {
+  font-size: clamp(2.2rem, 4vw, 3.4rem);
+  font-weight: 800;
+  margin-top: 16px;
+  line-height: 1.15;
+}
+.about-hero__title span {
+  color: var(--primary);
+}
+
+.about-hero__subtitle {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  max-width: 620px;
+  margin: 16px auto 0;
+  line-height: 1.6;
+}
+
+/* Features Grid */
+.about-features {
+  padding: 40px 0;
+}
+.about-features__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.about-feature-card {
+  padding: 28px;
+  background: #FFFFFF;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s;
+}
+.about-feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(255, 82, 0, 0.2);
+}
+
+.about-feature-card__icon {
+  font-size: 2.2rem;
+  margin-bottom: 14px;
+}
+.about-feature-card h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+}
+.about-feature-card p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* Stats Banner */
+.about-stats {
+  padding: 36px 0;
+  margin: 40px 0;
+  background: linear-gradient(135deg, var(--primary) 0%, #FF7A38 100%);
+  border-radius: var(--radius-xl);
+  color: #FFFFFF;
+  box-shadow: 0 12px 30px rgba(255, 82, 0, 0.25);
+}
+.about-stats__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 24px;
+  text-align: center;
+}
+.about-stats__item {
+  display: flex;
+  flex-direction: column;
+}
+.about-stats__number {
+  font-size: 2.2rem;
+  font-weight: 800;
+  font-family: 'Outfit', sans-serif;
+}
+.about-stats__label {
+  font-size: 0.88rem;
+  opacity: 0.9;
+  font-weight: 600;
+}
+
+/* Contact Section */
+.about-contact {
+  text-align: center;
+  padding: 40px 0;
+}
+.about-contact h2 {
+  font-size: 1.8rem;
+  font-weight: 800;
+}
+.about-contact__sub {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  margin-top: 4px;
+  margin-bottom: 32px;
+}
+
+.about-contact__cards {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.about-contact__card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 28px;
+  background: #FFFFFF;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  font-size: 0.95rem;
+  box-shadow: var(--shadow-sm);
+}

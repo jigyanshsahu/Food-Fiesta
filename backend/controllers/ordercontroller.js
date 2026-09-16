@@ -5,7 +5,7 @@ import Stripe from "stripe";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 const placeOrder = async (req, res) => {
-  const frontend_url = process.env.FRONTEND_URL || "http://localhost:5173";
+  const frontend_url = req.headers.origin || process.env.FRONTEND_URL || "http://localhost:5173";
 
   try {
     const newOrder = new orderModel({
@@ -52,9 +52,14 @@ const placeOrder = async (req, res) => {
 };
 
 const verifyorder = async (req, res) => {
-  const { orderid, success } = req.body;
+  const orderid = req.body.orderid || req.body.orderId || req.body.order_id;
+  const success = req.body.success;
   try {
-    if (success === "true") {
+    if (!orderid) {
+      return res.status(400).json({ success: false, message: "Order ID missing" });
+    }
+
+    if (success === "true" || success === true) {
       await orderModel.findByIdAndUpdate(orderid, { payment: true });
       res.json({ success: true, message: "paid" });
     } else {
