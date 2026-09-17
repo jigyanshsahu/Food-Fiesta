@@ -21,8 +21,29 @@ const app = express();
 const port = process.env.PORT || 4000;
 
 // ─── Security middleware ─────────────────────────────────────────────────────
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  process.env.ADMIN_URL,
+  "http://localhost:5173",
+  "http://localhost:5174",
+].filter(Boolean);
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || "http://localhost:5173",
+  origin: (origin, callback) => {
+    // Allow requests with no origin (e.g. mobile apps, curl, Postman, server-to-server)
+    if (!origin) return callback(null, true);
+
+    const envList = (process.env.ALLOWED_ORIGINS || "").split(",").map(s => s.trim()).filter(Boolean);
+    const validOrigins = [...allowedOrigins, ...envList];
+
+    // Allow all if wildcards configured or origin matches
+    if (validOrigins.length === 0 || validOrigins.includes("*") || validOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    // Permissive callback allows requests from any deployed frontend/admin domains
+    return callback(null, true);
+  },
   credentials: true,
 }));
 

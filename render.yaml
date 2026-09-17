@@ -2,50 +2,55 @@ services:
   # 1. THE BACKEND (API)
   - type: web
     name: food-fiesta-backend
-    runtime: docker
-    dockerContext: ./backend
-    dockerfilePath: backend/Dockerfile
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
     envVars:
       - key: PORT
         value: 10000
       - key: MONGO_URI
-        sync: false # Set this in Render dashboard for security
+        sync: false # Set your MongoDB Atlas connection string in Render dashboard
       - key: JWT_SECRET
-        sync: false
+        sync: false # Generate a random secure key
+      - key: STRIPE_SECRET_KEY
+        sync: false # Stripe Secret Key (sk_test_...)
       - key: CLOUDINARY_CLOUD_NAME
         sync: false
       - key: CLOUDINARY_API_KEY
         sync: false
       - key: CLOUDINARY_API_SECRET
         sync: false
-      - key: STRIPE_SECRET_KEY
-        sync: false
-    # Backend needs more memory if it handles images
+      - key: FRONTEND_URL
+        sync: false # Deployed URL of frontend (e.g. https://food-fiesta-frontend.onrender.com)
+      - key: ADMIN_URL
+        sync: false # Deployed URL of admin panel (e.g. https://food-fiesta-admin.onrender.com)
     plan: free
 
-  # 2. THE FRONTEND (USER APP)
-  - type: web
+  # 2. THE FRONTEND (USER APP - 100% Free Static Site)
+  - type: static
     name: food-fiesta-frontend
-    runtime: docker
-    dockerContext: ./frontend
-    dockerfilePath: frontend/Dockerfile
-    # Render needs to know the container is listening on port 80
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
     envVars:
-      - key: PORT
-        value: 80
       - key: VITE_BACKEND_URL
-        sync: false # SET THIS TO YOUR PUBLIC BACKEND URL IN RENDER DASHBOARD
-    plan: free
+        sync: false # Set to your backend URL (e.g. https://food-fiesta-backend.onrender.com)
 
-  # 3. THE ADMIN PANEL
-  - type: web
+  # 3. THE ADMIN PANEL (100% Free Static Site)
+  - type: static
     name: food-fiesta-admin
-    runtime: docker
-    dockerContext: ./admin
-    dockerfilePath: admin/Dockerfile
+    rootDir: admin
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
     envVars:
-      - key: PORT
-        value: 80
       - key: VITE_BACKEND_URL
-        sync: false # SET THIS TO YOUR PUBLIC BACKEND URL IN RENDER DASHBOARD
-    plan: free
+        sync: false # Set to your backend URL (e.g. https://food-fiesta-backend.onrender.com)
