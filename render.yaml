@@ -28,11 +28,12 @@ services:
     plan: free
 
   # 2. THE FRONTEND (USER APP - 100% Free Static Site)
-  - type: static
+  - type: web
     name: food-fiesta-frontend
+    runtime: static
     rootDir: frontend
     buildCommand: npm install && npm run build
-    staticPublishPath: dist
+    staticPublishPath: ./dist
     routes:
       - type: rewrite
         source: /*
@@ -42,11 +43,12 @@ services:
         sync: false # Set to your backend URL (e.g. https://food-fiesta-backend.onrender.com)
 
   # 3. THE ADMIN PANEL (100% Free Static Site)
-  - type: static
+  - type: web
     name: food-fiesta-admin
+    runtime: static
     rootDir: admin
     buildCommand: npm install && npm run build
-    staticPublishPath: dist
+    staticPublishPath: ./dist
     routes:
       - type: rewrite
         source: /*
